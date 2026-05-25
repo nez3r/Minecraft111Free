@@ -18,6 +18,7 @@ freeminecraft/
 
 # Клод и AI-настройки
 .claude/
+CLAUDE.md
 
 # Настройки среды разработки (IDE) в корне и подпапках
 .idea/
