@@ -48,15 +48,15 @@ public class GlitchManager {
             return;
         }
 
-        // SEPARATE GLITCH EVENTS:
-        // 4 minutes - window shake
-        long windowShakeTime = (long)(4 * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
-        // 8 minutes - day/night flicker
-        long dayNightFlickerTime = (long)(8 * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
-        // 15 minutes - cursor glitch
-        long cursorGlitchTime = (long)(15 * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
-        // 17 minutes - tunnel generation (final glitch)
-        long tunnelGenerationTime = (long)(17 * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
+        // SEPARATE GLITCH EVENTS (with random timing):
+        // 6-8 minutes - window shake
+        long windowShakeTime = (long)((6 + rand.nextInt(3)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
+        // 6-8 minutes - day/night flicker (after window shake)
+        long dayNightFlickerTime = (long)((6 + rand.nextInt(3)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
+        // 6-8 minutes - cursor glitch (after day/night)
+        long cursorGlitchTime = (long)((6 + rand.nextInt(3)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
+        // 6-8 minutes - tunnel generation (final glitch, after cursor)
+        long tunnelGenerationTime = (long)((6 + rand.nextInt(3)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
 
         // Trigger window shake at 4 minutes
         if (HorrorState.glitchCount == 0 && currentTime - HorrorState.lastGlitchTime > windowShakeTime) {

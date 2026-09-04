@@ -6,6 +6,6 @@ timeout /t 3 /NOBREAK >nul 2>&1
 
 echo -----------------
 echo Done
-pause
+:: pause
 
 exit	

@@ -22,7 +22,7 @@ public class ScreamerManager {
         long currentTime = System.currentTimeMillis();
 
         // Apply speed multiplier to timing
-        long screamerInterval = (long)((8 + rand.nextInt(7)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
+        long screamerInterval = (long)((6 + rand.nextInt(3)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier); // 6-8 min randomly
 
         // Check if enough time has passed since last screamer
         if (currentTime - HorrorState.lastScreamerTime > screamerInterval) {

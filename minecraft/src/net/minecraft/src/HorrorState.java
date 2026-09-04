@@ -104,7 +104,7 @@ public class HorrorState {
      * Check if enough time has passed for exit trap
      */
     public static boolean shouldActivateExitTrap() {
-        long requiredTime = (long)(30 * 60 * 1000 / horrorSpeedMultiplier);
+        long requiredTime = (long)((6 + (int)(Math.random() * 3)) * 60 * 1000 / horrorSpeedMultiplier); // 6-8 min randomly
         return totalPlayTime >= requiredTime;
     }
 
@@ -112,7 +112,7 @@ public class HorrorState {
      * Check if enough time has passed for screamers
      */
     public static boolean canTriggerScreamer() {
-        long requiredTime = (long)(10 * 60 * 1000 / horrorSpeedMultiplier);
+        long requiredTime = (long)((6 + (int)(Math.random() * 3)) * 60 * 1000 / horrorSpeedMultiplier); // 6-8 min
         return totalPlayTime >= requiredTime;
     }
 }

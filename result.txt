@@ -1,0 +1,1522 @@
+Building...
+Changing language to ru_RU
+Changing language to en_US
+RetroMCP v1.2
+
+
+ Client    0% [----------] Idle
+ Server    0% [----------] Recompiling
+ Client    0% [----------] Idle
+ Server    1% [----------] Recompiling
+ Client    0% [----------] Recompiling
+ Server    1% [----------] Recompiling
+ Client    1% [----------] Recompiling
+ Server    1% [----------] Recompiling
+ Client    1% [----------] Recompiling
+ Server    1% [----------] Recompiling
+ Client    1% [----------] Recompiling
+ Server    1% [----------] Recompiling
+ Client    1% [----------] Recompiling
+ Server    1% [----------] Recompiling
+ Client    1% [----------] Recompiling
+ Server    1% [----------] Recompiling
+ Client    1% [----------] Recompiling
+ Server    1% [----------] Recompiling
+ Client    2% [----------] Recompiling
+ Server    1% [----------] Recompiling
+ Client    2% [----------] Recompiling
+ Server    1% [----------] Recompiling
+ Client    2% [----------] Recompiling
+ Server    2% [----------] Recompiling
+ Client    2% [----------] Copying resources
+ Server    2% [----------] Recompiling
+ Client   25% [==--------] Copying resources
+ Server    2% [----------] Recompiling
+ Client   25% [==--------] Reobfuscating
+ Server    2% [----------] Recompiling
+ Client   60% [======----] Reobfuscating
+ Server    2% [----------] Recompiling
+ Client   60% [======----] Gathering MD5 hashes
+ Server    2% [----------] Recompiling
+ Client   50% [=====-----] Gathering MD5 hashes
+ Server    2% [----------] Recompiling
+ Client   50% [=====-----] Reobfuscating
+ Server    2% [----------] Recompiling
+ Client   60% [======----] Reobfuscating
+ Server    2% [----------] Recompiling
+ Client   60% [======----] Building
+ Server    2% [----------] Recompiling
+ Client   70% [=======---] Building
+ Server    2% [----------] Recompiling
+ Client  100% [==========] Building
+ Server    2% [----------] Recompiling
+ Client  100% [==========] Finished!
+ Server    2% [----------] Recompiling
+ Client  100% [==========] Finished!
+ Server    2% [----------] Copying resources
+ Client  100% [==========] Finished!
+ Server   25% [==--------] Copying resources
+ Client  100% [==========] Finished!
+ Server   25% [==--------] Reobfuscating
+ Client  100% [==========] Finished!
+ Server   60% [======----] Reobfuscating
+ Client  100% [==========] Finished!
+ Server   60% [======----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   50% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   52% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   53% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Gathering MD5 hashes
+ Client  100% [==========] Finished!
+ Server   54% [=====-----] Reobfuscating
+ Client  100% [==========] Finished!
+ Server   60% [======----] Reobfuscating
+ Client  100% [==========] Finished!
+ Server   60% [======----] Building
+ Client  100% [==========] Finished!
+ Server   70% [=======---] Building
+ Client  100% [==========] Finished!
+ Server  100% [==========] Building
+ Client  100% [==========] Finished!
+ Server  100% [==========] Finished!
+
+Error on line 106 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\VisualGlitch.java
+cannot find symbol
+  symbol:   class Random
+  location: class net.minecraft.src.VisualGlitch
+
+Error on line 58 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\FakeFrameFreeze.java
+cannot find symbol
+  symbol:   method playSound(double,double,double,java.lang.String,float,float)
+  location: variable worldObj of type net.minecraft.src.World
+
+Error on line 85 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\PartisanInterference.java
+cannot find symbol
+  symbol:   variable air
+  location: class net.minecraft.src.Block
+
+Error on line 112 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\PartisanInterference.java
+cannot find symbol
+  symbol:   variable air
+  location: class net.minecraft.src.Block
+
+Error on line 117 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\PartisanInterference.java
+cannot find symbol
+  symbol:   variable air
+  location: class net.minecraft.src.Block
+
+Error on line 133 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\PartisanInterference.java
+cannot find symbol
+  symbol:   variable text
+  location: variable sign of type net.minecraft.src.TileEntitySign
+
+Error on line 76 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\VisualGlitch.java
+cannot find symbol
+  symbol:   variable worldSizeX
+  location: variable world of type net.minecraft.src.World
+
+Error on line 76 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\VisualGlitch.java
+cannot find symbol
+  symbol:   variable worldSizeY
+  location: variable world of type net.minecraft.src.World
+
+Error on line 76 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\VisualGlitch.java
+cannot find symbol
+  symbol:   variable worldSizeZ
+  location: variable world of type net.minecraft.src.World
+
+Error on line 79 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\VisualGlitch.java
+cannot find symbol
+  symbol:   method getBlock(int,int,int)
+  location: variable world of type net.minecraft.src.World
+
+Error on line 85 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\VisualGlitch.java
+cannot find symbol
+  symbol:   variable blockAir
+  location: class net.minecraft.src.Block
+
+Error on line 93 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\VisualGlitch.java
+cannot find symbol
+  symbol:   variable blockAir
+  location: class net.minecraft.src.Block
+
+Error on line 99 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\VisualGlitch.java
+cannot find symbol
+  symbol:   variable blockAir
+  location: class net.minecraft.src.Block
+
+Error on line 106 in C:\Users\nez3r\Desktop\all\vers\minecraft1_1_1\minecraft\src\net\minecraft\src\VisualGlitch.java
+cannot find symbol
+  symbol:   class Random
+  location: class net.minecraft.src.VisualGlitch
+
+[ERROR]: Finished with errors!
+-----------------
+Done
+Для продолжения нажмите любую клавишу . . . 
+Завершить выполнение пакетного файла [Y(да)/N(нет)]? 
