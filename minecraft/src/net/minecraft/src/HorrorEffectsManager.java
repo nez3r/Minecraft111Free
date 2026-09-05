@@ -70,8 +70,9 @@ public class HorrorEffectsManager {
         }
 
         // Использовать средний интервал (5.5 минут) с учётом множителя скорости
-        // Интервал не должен меняться каждый кадр!
-        long effectInterval = (long)(5 * 60 * 1000L + 30 * 1000L / HorrorState.horrorSpeedMultiplier);
+        // При x100 интервал должен быть ~3.3 секунды
+        long baseInterval = 5 * 60 * 1000L + 30 * 1000L; // 5.5 минут
+        long effectInterval = (long)(baseInterval / HorrorState.horrorSpeedMultiplier);
 
         // Проверить, пора ли запускать следующий эффект
         if (currentTime - HorrorState.lastEffectTriggerTime >= effectInterval) {

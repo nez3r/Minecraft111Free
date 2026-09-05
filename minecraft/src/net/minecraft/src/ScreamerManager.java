@@ -149,7 +149,7 @@ public class ScreamerManager {
         );
 
         // Play sound
-        triggerAudioScreamer();
+        // triggerAudioScreamer();
 
         // Teleport back after 1 second
         new Thread(new Runnable() {

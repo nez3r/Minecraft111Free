@@ -15,6 +15,7 @@ result.txt
 unknown.dll
 saves
 
+minecraft/output
 minecraft/dll/*.dll
 minecraft/dll/*.o
 # Папки сборщика, библиотек и самого сервера
