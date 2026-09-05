@@ -11,7 +11,7 @@ import java.util.Random;
 public class DisappearingAnomalies {
     private static final int SPAWN_CHANCE = 5; // 5% chance per chunk
     private static final int DESPAWN_DISTANCE = 40;
-    private static final long TICK_INTERVAL = 100L; // Check every 5 ticks
+    private static final long TICK_INTERVAL = 5000L; // INCREASED from 100ms to 5 seconds - much less frequent
 
     private static World world;
     private static EntityPlayer player;
@@ -46,8 +46,9 @@ public class DisappearingAnomalies {
         if (world == null || player == null) return;
         if (HorrorState.safeMode) return;
 
-        // Only check periodically
-        if (System.currentTimeMillis() - lastTickTime < TICK_INTERVAL) return;
+        // Apply speed multiplier
+        long effectiveInterval = (long)(TICK_INTERVAL / HorrorState.horrorSpeedMultiplier);
+        if (System.currentTimeMillis() - lastTickTime < effectiveInterval) return;
         lastTickTime = System.currentTimeMillis();
 
         // Generate anomalies in loaded chunks
@@ -169,5 +170,16 @@ public class DisappearingAnomalies {
             world.setBlock(anomaly.x, anomaly.y, anomaly.z, 0);
         }
         activeAnomalies.clear();
+    }
+
+    public static void setWorld(World w, EntityPlayer p) {
+        world = w;
+        player = p;
+    }
+
+    public static void generateAnomaly() {
+        if (world != null && player != null) {
+            generateAnomalies();
+        }
     }
 }

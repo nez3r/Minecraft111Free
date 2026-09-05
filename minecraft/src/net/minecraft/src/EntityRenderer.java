@@ -1228,7 +1228,20 @@ public class EntityRenderer {
 
 			GL11.glFogf(GL11.GL_FOG_START, 0.0F);
 		} else {
-			GL11.glFog(GL11.GL_FOG_COLOR, this.setFogColorBuffer(this.fogColorRed, this.fogColorGreen, this.fogColorBlue, 1.0F));
+			// Apply horror fog multiplier and blood time tint
+			float horrorFogMultiplier = HorrorEffects.getFogMultiplier();
+			float horrorFogRed = this.fogColorRed;
+			float horrorFogGreen = this.fogColorGreen;
+			float horrorFogBlue = this.fogColorBlue;
+
+			// Apply blood time tint if active
+			if (BloodTimeCycle.isBloodModeActive()) {
+				horrorFogRed = Math.min(1.0F, horrorFogRed + BloodTimeCycle.getSkyRed() * 0.5F);
+				horrorFogGreen = Math.max(0.0F, horrorFogGreen - 0.1F);
+				horrorFogBlue = Math.max(0.0F, horrorFogBlue - 0.1F);
+			}
+
+			GL11.glFog(GL11.GL_FOG_COLOR, this.setFogColorBuffer(horrorFogRed, horrorFogGreen, horrorFogBlue, 1.0F));
 			GL11.glNormal3f(0.0F, -1.0F, 0.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			int var5 = ActiveRenderInfo.getBlockIdAtEntityViewpoint(this.mc.theWorld, var3, var2);
@@ -1318,12 +1331,14 @@ public class EntityRenderer {
 					}
 
 					GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
+					// Apply horror fog multiplier to fog distance
+					float fogEnd = var6 * horrorFogMultiplier;
 					if(var1 < 0) {
 						GL11.glFogf(GL11.GL_FOG_START, 0.0F);
-						GL11.glFogf(GL11.GL_FOG_END, var6 * 0.8F);
+						GL11.glFogf(GL11.GL_FOG_END, fogEnd * 0.8F);
 					} else {
-						GL11.glFogf(GL11.GL_FOG_START, var6 * 0.25F);
-						GL11.glFogf(GL11.GL_FOG_END, var6);
+						GL11.glFogf(GL11.GL_FOG_START, fogEnd * 0.25F);
+						GL11.glFogf(GL11.GL_FOG_END, fogEnd);
 					}
 
 					if(GLContext.getCapabilities().GL_NV_fog_distance) {

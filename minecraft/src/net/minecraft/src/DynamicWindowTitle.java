@@ -8,6 +8,7 @@ import org.lwjgl.opengl.Display;
 public class DynamicWindowTitle {
     private static String originalTitle = "Minecraft 1.1.1 Free";
     private static boolean titleUpdated = false;
+    private static EntityPlayer player;
 
     public static void updateTitle(EntityPlayer player) {
         if (player == null) return;
@@ -49,6 +50,16 @@ public class DynamicWindowTitle {
             titleUpdated = false;
         } catch (Exception e) {
             // Ignore
+        }
+    }
+
+    public static void setPlayer(EntityPlayer p) {
+        player = p;
+    }
+
+    public static void triggerGlitchedTitle(EntityPlayer p) {
+        if (p != null) {
+            updateTitle(p);
         }
     }
 }

@@ -25,6 +25,26 @@ public class GlitchManager {
     private static double cursorDriftY = 0;
 
     /**
+     * Trigger immediate glitch effects when /x command is used
+     */
+    public static void triggerImmediateGlitches(float multiplier) {
+        // Trigger all glitch effects immediately
+        triggerDayNightFlicker();
+        startCursorGlitch();
+        startWindowShake();
+
+        // If extreme multiplier, also trigger violent shake
+        if (multiplier > 10.0F) {
+            triggerViolentShake();
+        }
+
+        // Reset glitch timing so subsequent glitches happen faster
+        HorrorState.lastGlitchTime = System.currentTimeMillis();
+        HorrorState.glitchCount = 0;
+        HorrorState.finalGlitchTriggered = false;
+    }
+
+    /**
      * Update all glitch effects - call every tick
      */
     public static void update() {
@@ -49,14 +69,14 @@ public class GlitchManager {
         }
 
         // SEPARATE GLITCH EVENTS (with random timing):
-        // 6-8 minutes - window shake
-        long windowShakeTime = (long)((6 + rand.nextInt(3)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
-        // 6-8 minutes - day/night flicker (after window shake)
-        long dayNightFlickerTime = (long)((6 + rand.nextInt(3)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
-        // 6-8 minutes - cursor glitch (after day/night)
-        long cursorGlitchTime = (long)((6 + rand.nextInt(3)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
-        // 6-8 minutes - tunnel generation (final glitch, after cursor)
-        long tunnelGenerationTime = (long)((6 + rand.nextInt(3)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
+        // 4-7 minutes - window shake
+        long windowShakeTime = (long)((4 + rand.nextInt(4)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
+        // 4-7 minutes - day/night flicker (after window shake)
+        long dayNightFlickerTime = (long)((4 + rand.nextInt(4)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
+        // 4-7 minutes - cursor glitch (after day/night)
+        long cursorGlitchTime = (long)((4 + rand.nextInt(4)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
+        // 4-7 minutes - tunnel generation (final glitch, after cursor)
+        long tunnelGenerationTime = (long)((4 + rand.nextInt(4)) * 60 * 1000 / HorrorState.horrorSpeedMultiplier);
 
         // Trigger window shake at 4 minutes
         if (HorrorState.glitchCount == 0 && currentTime - HorrorState.lastGlitchTime > windowShakeTime) {
@@ -289,10 +309,11 @@ public class GlitchManager {
             mc.sndManager.playSoundFX("portal.portal", 2.0F, 0.3F);
         }
 
-        // Generate bedrock tunnel near player
-        if (mc.thePlayer != null && !HorrorState.tunnelGenerated) {
-            WorldGenBedrockTunnel.generateNearPlayer(mc.thePlayer);
-        }
+        // УДАЛЕНО: Generate bedrock tunnel near player
+        // Теперь туннель генерируется только через /event 50 или финальные эффекты
+        // if (mc.thePlayer != null && !HorrorState.tunnelGenerated) {
+        //     WorldGenBedrockTunnel.generateNearPlayer(mc.thePlayer);
+        // }
     }
 
     /**

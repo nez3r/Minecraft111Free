@@ -41,14 +41,39 @@ public class FalseBackgroundSounds {
         }
     }
 
-    private static void playLowHum() {
-        // Play low-frequency hum sound
-        // This uses a custom sound or modified ambient sound
-        // Simplified: play ambient.cave at lower pitch
-        // Actual implementation would need sound file modifications
-    }
-
     public static float getAmbientPitch() {
         return currentPitch;
+    }
+
+    /**
+     * Initialize sound system
+     */
+    public static void init() {
+        currentPitch = originalPitch;
+    }
+
+    /**
+     * Play ambient sound (Stage 1)
+     */
+    public static void playAmbientSound() {
+        currentPitch = 0.9F;
+    }
+
+    /**
+     * Play low hum (Stage 2-4)
+     */
+    public static void playLowHum() {
+        // Play low-frequency hum sound
+        // Simplified: play ambient.cave at lower pitch
+        currentPitch = 0.7F;
+    }
+
+    /**
+     * Reset sound system
+     */
+    public static void reset() {
+        currentPitch = originalPitch;
+        inventoryOpen = false;
+        inventoryOpenTime = 0;
     }
 }

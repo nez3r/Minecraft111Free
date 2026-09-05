@@ -7,6 +7,11 @@ public class InventoryGlitch {
     private static boolean glitchActive = false;
     private static long lastGlitchTime = 0;
     private static final long GLITCH_INTERVAL = 15000L; // 15 seconds
+    private static EntityPlayer player;
+
+    public static void setPlayer(EntityPlayer p) {
+        player = p;
+    }
 
     public static boolean isGlitchActive() {
         return glitchActive && (System.currentTimeMillis() - lastGlitchTime > GLITCH_INTERVAL);
@@ -52,5 +57,29 @@ public class InventoryGlitch {
         if (Math.random() < 0.01) { // 1% chance per tick
             triggerGlitch();
         }
+    }
+
+    /**
+     * Trigger minor glitch (Stage 1)
+     */
+    public static void triggerMinorGlitch() {
+        glitchActive = true;
+        lastGlitchTime = System.currentTimeMillis();
+    }
+
+    /**
+     * Trigger major glitch (Stage 2-4)
+     */
+    public static void triggerMajorGlitch() {
+        glitchActive = true;
+        lastGlitchTime = System.currentTimeMillis();
+    }
+
+    /**
+     * Reset inventory glitch system
+     */
+    public static void reset() {
+        glitchActive = false;
+        lastGlitchTime = 0;
     }
 }

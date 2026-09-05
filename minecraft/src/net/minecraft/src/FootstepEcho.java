@@ -22,6 +22,11 @@ public class FootstepEcho {
         FootstepEcho.player = player;
     }
 
+    public static void setWorld(World w, EntityPlayer p) {
+        world = w;
+        player = p;
+    }
+
     /**
      * Call this every tick to track player movement and schedule echoes.
      */
@@ -68,7 +73,8 @@ public class FootstepEcho {
         if (!echoScheduled) return;
 
         long elapsed = System.currentTimeMillis() - lastScheduledEchoTime;
-        long delay = ECHO_DELAY_MIN + (long)(Math.random() * (ECHO_DELAY_MAX - ECHO_DELAY_MIN));
+        // Apply speed multiplier - echoes happen faster when /x is used
+        long delay = (long)((ECHO_DELAY_MIN + Math.random() * (ECHO_DELAY_MAX - ECHO_DELAY_MIN)) / HorrorState.horrorSpeedMultiplier);
 
         if (elapsed >= delay) {
             playEcho();
@@ -150,5 +156,23 @@ public class FootstepEcho {
      */
     public static void triggerImmediateEcho() {
         playEcho();
+    }
+
+    /**
+     * Trigger echo (alias for compatibility)
+     */
+    public static void triggerEcho() {
+        triggerImmediateEcho();
+    }
+
+    /**
+     * Reset footstep echo system
+     */
+    public static void reset() {
+        wasMoving = false;
+        stopTime = 0;
+        echoScheduled = false;
+        lastFootstepSound = "";
+        lastScheduledEchoTime = 0;
     }
 }

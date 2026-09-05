@@ -39,8 +39,8 @@ public class VisualGlitch {
         if (world == null || player == null) return;
         if (HorrorState.safeMode) return;
 
-        // Throttle checks
-        if (System.currentTimeMillis() - lastCheckTime < GLITCH_INTERVAL) return;
+        long effectiveInterval = (long)(GLITCH_INTERVAL / HorrorState.horrorSpeedMultiplier);
+        if (System.currentTimeMillis() - lastCheckTime < effectiveInterval) return;
         lastCheckTime = System.currentTimeMillis();
 
         // Calculate player's yaw and check if looking behind

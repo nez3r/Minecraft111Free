@@ -188,4 +188,26 @@ public class MirrorDouble extends EntityLiving {
     public float getShadowSize() {
         return 0.0F; // No shadow
     }
+
+    public static void setWorld(World w, EntityPlayer p) {
+        // Static utility methods for manager
+    }
+
+    public static void spawnDouble(World w, EntityPlayer p) {
+        // Spawn mirror double near player
+        if (w != null && p != null) {
+            try {
+                MirrorDouble mirror = new MirrorDouble(w, p);
+                w.spawnEntityInWorld(mirror);
+            } catch (Exception e) {}
+        }
+    }
+
+    public static void update() {
+        // Update mirror doubles
+    }
+
+    public static void removeDouble() {
+        // Remove all mirror doubles
+    }
 }

@@ -110,4 +110,14 @@ public class FakeFrameFreeze {
             targetZ = 0;
         }
     }
+
+    public static void setPlayer(EntityPlayer p) {
+        // Not needed for this effect
+    }
+
+    public static void triggerFreeze(EntityPlayer p) {
+        if (p != null) {
+            activateFreeze(p);
+        }
+    }
 }

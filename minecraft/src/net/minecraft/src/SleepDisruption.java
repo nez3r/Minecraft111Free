@@ -8,12 +8,17 @@ public class SleepDisruption {
     private static boolean sleepInterrupted = false;
     private static long interruptTime = 0;
     private static final long INTERRUPT_DURATION = 5000L; // 5 seconds
+    private static World world;
+    private static EntityPlayer player;
 
     /**
      * Called when player attempts to sleep. Returns true to block normal sleep.
      */
     public static boolean onPlayerSleep(EntityPlayer player) {
         if (HorrorState.safeMode) return false;
+
+        // Speed multiplier reduces the cooldown
+        // Effect is always active when /x is used
 
         // Always interrupt sleep (horror effect)
         sleepInterrupted = true;
@@ -100,6 +105,16 @@ public class SleepDisruption {
      * Reset the interruption state.
      */
     public static void reset() {
+        sleepInterrupted = false;
+    }
+
+    public static void setWorld(World w, EntityPlayer p) {
+        world = w;
+        player = p;
+    }
+
+    public static void armTrap() {
+        // Arm the sleep trap for next attempt
         sleepInterrupted = false;
     }
 }

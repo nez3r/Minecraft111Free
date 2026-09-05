@@ -6,8 +6,8 @@ package net.minecraft.src;
  * Runs when player is in another room, so they return to a changed world.
  */
 public class PartisanInterference {
-    private static final int CHUNK_RADIUS = 4; // Check chunks within 4 chunks
-    private static final long TICK_INTERVAL = 100L; // Run every 5 ticks
+    private static final int CHUNK_RADIUS = 2; // REDUCED from 4 to 2 - less lag
+    private static final long TICK_INTERVAL = 5000L; // INCREASED from 100ms to 5 seconds - much less frequent
 
     private static World world;
     private static EntityPlayer player;
@@ -47,17 +47,22 @@ public class PartisanInterference {
     }
 
     private static void modifyChunkBlocks(int chunkX, int chunkZ) {
-        // Each chunk is 16x16 blocks at height 0-128
-        for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < 128; y++) {
-                for (int z = 0; z < 16; z++) {
-                    int blockId = world.getBlockId(chunkX * 16 + x, y, chunkZ * 16 + z);
+        // OPTIMIZED: Instead of checking ALL blocks (32,768 per chunk),
+        // only check a few random blocks per chunk to reduce lag
+        int checksPerChunk = 5; // Only check 5 random blocks instead of all
 
-                    if (blockId == 0) continue; // Air, skip
+        for (int i = 0; i < checksPerChunk; i++) {
+            int x = (int)(Math.random() * 16);
+            int y = (int)(Math.random() * 128);
+            int z = (int)(Math.random() * 16);
 
-                    modifySingleBlock(chunkX * 16 + x, y, chunkZ * 16 + z, blockId);
-                }
-            }
+            int worldX = chunkX * 16 + x;
+            int worldZ = chunkZ * 16 + z;
+
+            int blockId = world.getBlockId(worldX, y, worldZ);
+            if (blockId == 0) continue; // Air, skip
+
+            modifySingleBlock(worldX, y, worldZ, blockId);
         }
     }
 
@@ -154,5 +159,17 @@ public class PartisanInterference {
             "run"
         };
         return texts[(int)(Math.random() * texts.length)];
+    }
+
+    public static void setWorld(World w, EntityPlayer p) {
+        world = w;
+        player = p;
+    }
+
+    public static void triggerInterference() {
+        // Trigger immediate interference
+        if (world != null && player != null) {
+            tick();
+        }
     }
 }

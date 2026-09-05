@@ -21,6 +21,11 @@ public class HorrorState {
     public static long lastCursorGlitchTime = 0;
     public static long lastWindowShakeTime = 0;
 
+    // New horror effects system
+    public static int currentEffectStage = 0; // 0 = none, 1 = weak, 2 = medium, 3 = strong, 4 = extreme
+    public static long lastEffectTriggerTime = 0;
+    public static int effectsTriggeredCount = 0;
+
     // Screamer system
     public static long lastScreamerTime = 0;
     public static int screamerCount = 0;
@@ -89,6 +94,9 @@ public class HorrorState {
         tunnelGenerated = false;
         tunnelEntranceClosed = false;
         tunnelChestOpened = false;
+        currentEffectStage = 0;
+        lastEffectTriggerTime = 0;
+        effectsTriggeredCount = 0;
     }
 
     /**
@@ -104,7 +112,7 @@ public class HorrorState {
      * Check if enough time has passed for exit trap
      */
     public static boolean shouldActivateExitTrap() {
-        long requiredTime = (long)((6 + (int)(Math.random() * 3)) * 60 * 1000 / horrorSpeedMultiplier); // 6-8 min randomly
+        long requiredTime = (long)((4 + (int)(Math.random() * 4)) * 60 * 1000 / horrorSpeedMultiplier); // 4-7 min randomly
         return totalPlayTime >= requiredTime;
     }
 
@@ -112,7 +120,7 @@ public class HorrorState {
      * Check if enough time has passed for screamers
      */
     public static boolean canTriggerScreamer() {
-        long requiredTime = (long)((6 + (int)(Math.random() * 3)) * 60 * 1000 / horrorSpeedMultiplier); // 6-8 min
+        long requiredTime = (long)((4 + (int)(Math.random() * 4)) * 60 * 1000 / horrorSpeedMultiplier); // 4-7 min
         return totalPlayTime >= requiredTime;
     }
 }

@@ -109,14 +109,15 @@ public abstract class GuiContainer extends GuiScreen {
 				this.drawGradientRect(var11 - 3, var12 - 3, var11 + var10 + 3, var12 - 3 + 1, var16, var16);
 				this.drawGradientRect(var11 - 3, var12 + var14 + 2, var11 + var10 + 3, var12 + var14 + 3, var17, var17);
 
-				for(int var18 = 0; var18 < var24.size(); ++var18) {
-					String var19 = (String)var24.get(var18);
-					if(var18 == 0) {
-						var19 = "\u00a7" + Integer.toHexString(var23.func_40707_s().field_40535_e) + var19;
-					} else {
-						var19 = "\u00a77" + var19;
-					}
-
+					for(int var18 = 0; var18 < var24.size(); ++var18) {
+						String var19 = (String)var24.get(var18);
+						if(var18 == 0) {
+							// Apply inventory glitch to item name
+							var19 = HorrorEffects.glitchItemName(var19);
+							var19 = "\u00a7" + Integer.toHexString(var23.func_40707_s().field_40535_e) + var19;
+						} else {
+							var19 = "\u00a77" + var19;
+						}
 					this.fontRenderer.drawStringWithShadow(var19, var11, var12, -1);
 					if(var18 == 0) {
 						var12 += 2;

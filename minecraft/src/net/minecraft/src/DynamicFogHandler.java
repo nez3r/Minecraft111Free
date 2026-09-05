@@ -18,11 +18,17 @@ public class DynamicFogHandler {
         DynamicFogHandler.player = player;
     }
 
+    public static void setWorld(World w, EntityPlayer p) {
+        world = w;
+        player = p;
+    }
+
     /**
      * Updates fog density based on player position and nearby hidden entities.
      */
     public static void updateFog() {
         if (player == null || world == null) return;
+        if (HorrorState.safeMode) return;
 
         boolean shouldCompress = false;
 
@@ -64,5 +70,37 @@ public class DynamicFogHandler {
 
     public static boolean isFogCompressed() {
         return fogCompressed;
+    }
+
+    /**
+     * Increase fog slightly (Stage 1)
+     */
+    public static void increaseFogSlightly() {
+        compressedFogDensity = 0.2F;
+        fogCompressed = true;
+    }
+
+    /**
+     * Trigger moderate fog (Stage 2)
+     */
+    public static void triggerModerateFog() {
+        compressedFogDensity = 0.35F;
+        fogCompressed = true;
+    }
+
+    /**
+     * Trigger heavy fog (Stage 3-4)
+     */
+    public static void triggerHeavyFog() {
+        compressedFogDensity = 0.5F;
+        fogCompressed = true;
+    }
+
+    /**
+     * Reset fog to normal
+     */
+    public static void reset() {
+        fogCompressed = false;
+        compressedFogDensity = 0.5F;
     }
 }

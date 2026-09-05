@@ -193,4 +193,27 @@ public class PhantomObserver extends EntityMob {
     public float getShadowSize() {
         return 0.0F; // No shadow
     }
+
+    public static void setWorld(World w, EntityPlayer p) {
+        // Static utility methods for manager
+    }
+
+    public static void spawnNearPlayer(World w, EntityPlayer p) {
+        // Spawn phantom near player - simplified
+        if (w != null && p != null) {
+            try {
+                PhantomObserver phantom = new PhantomObserver(w);
+                phantom.setPosition(p.posX + 20, p.posY, p.posZ);
+                w.spawnEntityInWorld(phantom);
+            } catch (Exception e) {}
+        }
+    }
+
+    public static void updateAll(World w, EntityPlayer p) {
+        // Update all phantoms in world
+    }
+
+    public static void removeAll() {
+        // Remove all phantoms
+    }
 }

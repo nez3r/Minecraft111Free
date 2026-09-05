@@ -693,7 +693,16 @@ public class RenderGlobal implements IWorldAccess {
 			Tessellator var21 = Tessellator.instance;
 			GL11.glDepthMask(false);
 			GL11.glEnable(GL11.GL_FOG);
-			GL11.glColor3f(var3, var4, var5);
+				// Apply blood time tint to sky
+				float skyRed = var3;
+				float skyGreen = var4;
+				float skyBlue = var5;
+				if (BloodTimeCycle.isBloodModeActive()) {
+					skyRed = Math.min(1.0F, var3 + BloodTimeCycle.getSkyRed());
+					skyGreen = Math.max(0.0F, var4 - 0.2F);
+					skyBlue = Math.max(0.0F, var5 - 0.2F);
+				}
+				GL11.glColor3f(skyRed, skyGreen, skyBlue);
 			GL11.glCallList(this.glSkyList);
 			GL11.glDisable(GL11.GL_FOG);
 			GL11.glDisable(GL11.GL_ALPHA_TEST);

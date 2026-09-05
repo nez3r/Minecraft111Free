@@ -30,6 +30,11 @@ public class BloodTimeCycle {
         BloodTimeCycle.player = player;
     }
 
+    public static void setWorld(World w, EntityPlayer p) {
+        world = w;
+        player = p;
+    }
+
     /**
      * Updates time cycle - fixes at midnight and applies blood tint when needed.
      */
@@ -136,5 +141,24 @@ public class BloodTimeCycle {
 
     public static boolean isBloodModeActive() {
         return bloodModeActive;
+    }
+
+    /**
+     * Trigger blood time effect manually
+     */
+    public static void triggerBloodTime() {
+        activateBloodMode();
+    }
+
+    /**
+     * Reset blood time to normal
+     */
+    public static void reset() {
+        bloodModeActive = false;
+        lastBloodTintTime = 0;
+        caveExplorationTicks = 0;
+        currentSkyRed = NORMAL_SKY_RED;
+        currentSkyGreen = NORMAL_SKY_GREEN;
+        currentSkyBlue = NORMAL_SKY_BLUE;
     }
 }

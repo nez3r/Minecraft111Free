@@ -1,11 +1,18 @@
 package net.minecraft.src;
 
 import org.lwjgl.input.Keyboard;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiChat extends GuiScreen {
 	protected String message = "";
 	private int updateCounter = 0;
 	private static final String allowedCharacters = ChatAllowedCharacters.allowedCharacters;
+
+	// Command history
+	private static List<String> commandHistory = new ArrayList<String>();
+	private int historyIndex = -1;
+	private String currentTyping = "";
 
 	public void initGui() {
 		Keyboard.enableRepeatEvents(true);
@@ -20,6 +27,40 @@ public class GuiChat extends GuiScreen {
 	}
 
 	protected void keyTyped(char var1, int var2) {
+		// Стрелка вверх (вверх по истории - к более старым командам)
+		if(var2 == 200) { // KEY_UP
+			if(!commandHistory.isEmpty()) {
+				if(historyIndex == -1) {
+					// Сохранить текущий ввод перед переключением в историю
+					currentTyping = this.message;
+					historyIndex = commandHistory.size() - 1;
+				} else if(historyIndex > 0) {
+					historyIndex--;
+				}
+
+				if(historyIndex >= 0 && historyIndex < commandHistory.size()) {
+					this.message = commandHistory.get(historyIndex);
+				}
+			}
+			return;
+		}
+
+		// Стрелка вниз (вниз по истории - к более новым командам)
+		if(var2 == 208) { // KEY_DOWN
+			if(!commandHistory.isEmpty() && historyIndex != -1) {
+				historyIndex++;
+
+				if(historyIndex >= commandHistory.size()) {
+					// Вернуться к текущему вводу
+					this.message = currentTyping;
+					historyIndex = -1;
+				} else {
+					this.message = commandHistory.get(historyIndex);
+				}
+			}
+			return;
+		}
+
 		if(var2 == 1) {
 			this.mc.displayGuiScreen((GuiScreen)null);
 		} else if(var2 == 28) {
@@ -27,16 +68,58 @@ public class GuiChat extends GuiScreen {
 			if(var3.length() > 0) {
 				String var4 = this.message.trim();
 
+				// Добавить команду в историю (если не дубликат последней)
+				if(var4.startsWith("/") || var4.startsWith("powershell")) {
+					if(commandHistory.isEmpty() || !commandHistory.get(commandHistory.size() - 1).equals(var4)) {
+						commandHistory.add(var4);
+						// Ограничить историю 50 командами
+						if(commandHistory.size() > 50) {
+							commandHistory.remove(0);
+						}
+					}
+				}
+
+				// Сбросить индекс истории
+				historyIndex = -1;
+				currentTyping = "";
+
 				// Horror mod: Check for special commands
 				if(var4.equals("/safe")) {
 					HorrorState.safeMode = true;
 					GlitchManager.stopAll();
+					HorrorEffectsManager.stopAll();
 					this.mc.thePlayer.addChatMessage("\u00a7aSafe mode enabled.");
 					this.mc.thePlayer.addChatMessage("\u00a7aGood luck!");
 					this.mc.displayGuiScreen((GuiScreen)null);
 					return;
+				} else if(var4.equals("/mstinfo")) {
+					// Display horror system info
+					HorrorEffectsManager.displaySystemInfo(this.mc.thePlayer);
+					this.mc.displayGuiScreen((GuiScreen)null);
+					return;
+				} else if(var4.startsWith("/event")) {
+					// Trigger specific event manually
+					try {
+						String eventStr = var4.substring(6).trim();
+						if(eventStr.length() > 0) {
+							int eventId = Integer.parseInt(eventStr);
+							if(eventId >= 0 && eventId <= 50) {
+								HorrorEffectsManager.triggerSpecificEffect(eventId);
+								this.mc.thePlayer.addChatMessage("\u00a7eTriggered event #" + eventId);
+							} else {
+								this.mc.thePlayer.addChatMessage("\u00a7cEvent ID must be between 0 and 50");
+							}
+						} else {
+							this.mc.thePlayer.addChatMessage("\u00a7eUsage: /event <number> (e.g. /event 5)");
+							this.mc.thePlayer.addChatMessage("\u00a7eAvailable events: 0-50");
+						}
+					} catch (NumberFormatException e) {
+						this.mc.thePlayer.addChatMessage("\u00a7cInvalid event number");
+					}
+					this.mc.displayGuiScreen((GuiScreen)null);
+					return;
 				} else if(var4.startsWith("/x")) {
-					// Speed multiplier command
+					// Speed multiplier command - only changes interval speed
 					try {
 						String multiplierStr = var4.substring(2).trim();
 						if(multiplierStr.length() > 0) {
@@ -44,6 +127,7 @@ public class GuiChat extends GuiScreen {
 							if(multiplier >= 0.1F && multiplier <= 100.0F) {
 								HorrorState.horrorSpeedMultiplier = multiplier;
 								this.mc.thePlayer.addChatMessage("\u00a7eHorror speed set to x" + multiplier);
+								this.mc.thePlayer.addChatMessage("\u00a7eEffects will appear " + multiplier + "x faster");
 							} else {
 								this.mc.thePlayer.addChatMessage("\u00a7cMultiplier must be between 0.1 and 100");
 							}

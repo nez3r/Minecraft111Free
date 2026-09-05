@@ -83,6 +83,10 @@ public class GuiMainMenu extends GuiScreen {
 		}
 
 		this.controlList.add(new GuiButtonLanguage(5, this.width / 2 - 124, var4 + 72 + 12));
+
+		// Тестовая кнопка "???" для Unknown.dll
+		this.controlList.add(new GuiButton(99, this.width - 25, 5, 20, 20, "???"));
+
 		if(this.mc.session == null) {
 			this.multiplayerButton.enabled = false;
 		}
@@ -112,6 +116,11 @@ public class GuiMainMenu extends GuiScreen {
 
 		if(var1.id == 4) {
 			this.mc.shutdown();
+		}
+
+		// Тестовая кнопка "???" - вызов MessageBox из Unknown.dll
+		if(var1.id == 99) {
+			UnknownEffects.testMessageBox();
 		}
 
 	}
@@ -280,7 +289,7 @@ public class GuiMainMenu extends GuiScreen {
 		this.drawCenteredString(this.fontRenderer, this.splashText, 0, -8, 16776960);
 		GL11.glPopMatrix();
 		this.drawString(this.fontRenderer, "Minecraft 1.1.1 Free", 2, this.height - 10, 16777215);
-		String var9 = "Copyright Rojang Ac. Do not distribute!";
+		String var9 = "unkn";
 		this.drawString(this.fontRenderer, var9, this.width - this.fontRenderer.getStringWidth(var9) - 2, this.height - 10, 16777215);
 		super.drawScreen(var1, var2, var3);
 	}

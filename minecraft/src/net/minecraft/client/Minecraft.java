@@ -36,6 +36,8 @@ import net.minecraft.src.GLAllocation;
 import net.minecraft.src.GameSettings;
 import net.minecraft.src.GameWindowListener;
 import net.minecraft.src.GlitchManager;
+import net.minecraft.src.HorrorEffectsManager;
+import net.minecraft.src.HorrorIntegration;
 import net.minecraft.src.GuiAchievement;
 import net.minecraft.src.GuiChat;
 import net.minecraft.src.GuiConflictWarning;
@@ -1099,6 +1101,15 @@ public abstract class Minecraft implements Runnable {
 		if(this.theWorld != null && !this.theWorld.multiplayerWorld) {
 			GlitchManager.update();
 			ScreamerManager.update();
+
+			// Update new horror effects system
+			if(this.thePlayer != null) {
+				HorrorEffectsManager.setWorld(this.theWorld, this.thePlayer);
+				HorrorEffectsManager.update();
+					// Initialize and tick horror integration (footstep echo, blood time, etc.)
+					HorrorIntegration.init(this.theWorld, this.thePlayer);
+					HorrorIntegration.tick();
+			}
 		}
 
 		Profiler.startSection("stats");
