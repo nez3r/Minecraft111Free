@@ -7,6 +7,16 @@ gitpub.bat
 RetroMCP-Java-CLI.jar
 RetroMCP-Java-GUI.jar
 
+resources
+stats
+texturepacks
+options.txt
+result.txt
+unknown.dll
+saves
+
+minecraft/dll/*.dll
+minecraft/dll/*.o
 # Папки сборщика, библиотек и самого сервера
 build/
 conf/
@@ -36,3 +46,4 @@ minecraft/jars/
 
 # Рабочие файлы игры (карты, логи, конфиги модов)
 minecraft/game/
+*.log
