@@ -192,6 +192,31 @@ public class HorrorEffects {
         bloodTimeEnd = System.currentTimeMillis() + 15000; // 15 секунд
     }
 
+    // =============================================================================
+    // 8. INVERTED CAMERA - Переворот мира (4 секунды)
+    // =============================================================================
+    private static boolean invertedCameraActive = false;
+    private static long invertedCameraEnd = 0;
+
+    public static void triggerInvertedCamera() {
+        System.out.println("[HorrorEffects] Triggering Inverted Camera (4s)");
+        invertedCameraActive = true;
+        invertedCameraEnd = System.currentTimeMillis() + 4000;
+    }
+
+    public static boolean isInvertedCameraActive() {
+        if (System.currentTimeMillis() > invertedCameraEnd) {
+            invertedCameraActive = false;
+        }
+        return invertedCameraActive;
+    }
+
+    public static void resetInvertedCamera() {
+        System.out.println("[HorrorEffects] Resetting Inverted Camera");
+        invertedCameraActive = false;
+        invertedCameraEnd = 0;
+    }
+
     public static boolean isBloodTimeActive() {
         if (System.currentTimeMillis() > bloodTimeEnd) {
             bloodTimeActive = false;

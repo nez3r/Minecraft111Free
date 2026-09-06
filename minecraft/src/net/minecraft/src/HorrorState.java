@@ -54,6 +54,7 @@ public class HorrorState {
 
     // Bedrock tunnel
     public static boolean tunnelGenerated = false;
+    public static boolean tunnelSpawned = false; // For HorrorEffectsManager one-time spawn
     public static int tunnelX = 0;
     public static int tunnelY = 0;
     public static int tunnelZ = 0;

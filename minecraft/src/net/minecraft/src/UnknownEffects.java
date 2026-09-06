@@ -41,6 +41,24 @@ public class UnknownEffects {
         // 9. Test MessageBox - Тестовый MessageBox
         void TestMessageBox();
 
+        // 10. Wallpaper Corruptor - Подмена обоев рабочего стола
+        void WallpaperCorruptor(String tempBmpPath);
+
+        // 11. Fake BSOD Overlay - Фальшивый BSOD
+        void FakeBSODOverlay(int duration);
+
+        // 12. Window Ghost Icon - Искажение иконки
+        void WindowGhostIcon(String windowTitle, int iconType);
+
+        // 13. Window Transparency Ghosting - Полупрозрачность окна
+        void WindowTransparencyGhosting(com.sun.jna.Pointer hwnd, int durationMs);
+
+        // 14. Trigger Resolution Snap - Падение разрешения
+        void TriggerResolutionSnap(int durationMs);
+
+        // 15. Pulse System Volume - Скачок громкости
+        void PulseSystemVolume(int durationMs);
+
         // Утилиты
         void SetEffectsEnabled(boolean enabled);
         void RestoreGamma();
@@ -130,7 +148,11 @@ public class UnknownEffects {
     public static void screenMelt(int duration, int intensity) {
         if (!isAvailable()) return;
         try {
-            new Thread(() -> UnknownDLL.INSTANCE.GDI_ScreenMelt(duration, intensity)).start();
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.GDI_ScreenMelt(duration, intensity);
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -144,7 +166,11 @@ public class UnknownEffects {
     public static void corruptGamma(int mode, int duration) {
         if (!isAvailable()) return;
         try {
-            new Thread(() -> UnknownDLL.INSTANCE.GammaRampCorruptor(mode, duration)).start();
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.GammaRampCorruptor(mode, duration);
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -160,7 +186,11 @@ public class UnknownEffects {
     public static void possessCursor(int targetX, int targetY, int strength, int duration) {
         if (!isAvailable()) return;
         try {
-            new Thread(() -> UnknownDLL.INSTANCE.CursorPossession(targetX, targetY, strength, duration)).start();
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.CursorPossession(targetX, targetY, strength, duration);
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,7 +205,11 @@ public class UnknownEffects {
         if (!isAvailable()) return;
         try {
             String title = "Minecraft 1.1.1 Free";
-            new Thread(() -> UnknownDLL.INSTANCE.WindowPhysicalJitter(title, intensity, duration)).start();
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.WindowPhysicalJitter(title, intensity, duration);
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,7 +223,11 @@ public class UnknownEffects {
     public static void hardwareBeep(int frequency, int duration) {
         if (!isAvailable()) return;
         try {
-            new Thread(() -> UnknownDLL.INSTANCE.SystemBeepHardware(frequency, duration)).start();
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.SystemBeepHardware(frequency, duration);
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -215,7 +253,11 @@ public class UnknownEffects {
     public static void ghostOverlay(int duration) {
         if (!isAvailable()) return;
         try {
-            new Thread(() -> UnknownDLL.INSTANCE.DesktopOverlayGhost(duration)).start();
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.DesktopOverlayGhost(duration);
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -229,7 +271,11 @@ public class UnknownEffects {
         if (!isAvailable()) return;
         try {
             String title = "Minecraft 1.1.1 Free";
-            new Thread(() -> UnknownDLL.INSTANCE.TaskbarAggression(title, duration)).start();
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.TaskbarAggression(title, duration);
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -265,7 +311,116 @@ public class UnknownEffects {
     public static void testMessageBox() {
         if (!isAvailable()) return;
         try {
-            new Thread(() -> UnknownDLL.INSTANCE.TestMessageBox()).start();
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.TestMessageBox();
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 10. Подмена обоев рабочего стола
+     * Создаёт временный BMP с искажениями и устанавливает как обои
+     */
+    public static void corruptWallpaper() {
+        if (!isAvailable()) return;
+        try {
+            String tempPath = System.getProperty("java.io.tmpdir") + "\\horror_wallpaper.bmp";
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.WallpaperCorruptor(tempPath);
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 11. Фальшивый BSOD при смерти
+     * @param duration Длительность в миллисекундах
+     */
+    public static void fakeBSOD(int duration) {
+        if (!isAvailable()) return;
+        try {
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.FakeBSODOverlay(duration);
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 12. Искажение иконки приложения
+     * @param iconType 0=нормальная, 1=искаженное лицо, 2=кровавый символ
+     */
+    public static void ghostIcon(int iconType) {
+        if (!isAvailable()) return;
+        try {
+            String title = "Minecraft 1.1.1 Free";
+            UnknownDLL.INSTANCE.WindowGhostIcon(title, iconType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 13. Полупрозрачность окна на 3 секунды
+     */
+    public static void windowTransparency(int durationMs) {
+        if (!isAvailable()) return;
+        try {
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        // Получить хэндл окна через User32
+                        com.sun.jna.platform.win32.WinDef.HWND hwnd = com.sun.jna.platform.win32.User32.INSTANCE.GetActiveWindow();
+                        if (hwnd != null) {
+                            UnknownDLL.INSTANCE.WindowTransparencyGhosting(hwnd.getPointer(), durationMs);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 14. Падение разрешения экрана до 640x480 на 3 секунды
+     */
+    public static void resolutionSnap(int durationMs) {
+        if (!isAvailable()) return;
+        try {
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.TriggerResolutionSnap(durationMs);
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 15. Скачок системной громкости на 100% на 6 секунд
+     */
+    public static void pulseSystemVolume(int durationMs) {
+        if (!isAvailable()) return;
+        try {
+            new Thread(new Runnable() {
+                public void run() {
+                    UnknownDLL.INSTANCE.PulseSystemVolume(durationMs);
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }

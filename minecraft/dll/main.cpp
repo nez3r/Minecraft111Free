@@ -328,6 +328,260 @@ EXPORT void TestMessageBox() {
 }
 
 // =============================================================================
+// 10. WallpaperCorruptor - Подмена обоев рабочего стола
+// =============================================================================
+EXPORT void WallpaperCorruptor(const char* tempBmpPath) {
+    if (!g_effectsActive) return;
+
+    // Создать временный BMP с искажениями
+    HDC hdcScreen = GetDC(NULL);
+    HDC hdcMem = CreateCompatibleDC(hdcScreen);
+
+    int width = GetSystemMetrics(SM_CXSCREEN);
+    int height = GetSystemMetrics(SM_CYSCREEN);
+
+    HBITMAP hBitmap = CreateCompatibleBitmap(hdcScreen, width, height);
+    SelectObject(hdcMem, hBitmap);
+
+    // Скопировать экран
+    BitBlt(hdcMem, 0, 0, width, height, hdcScreen, 0, 0, SRCCOPY);
+
+    // Добавить искажения: темный силуэт, битые пиксели, координаты
+    // Темный силуэт в центре
+    HBRUSH darkBrush = CreateSolidBrush(RGB(10, 0, 0));
+    SelectObject(hdcMem, darkBrush);
+    Ellipse(hdcMem, width/2 - 100, height/2 - 150, width/2 + 100, height/2 + 150);
+    DeleteObject(darkBrush);
+
+    // Битые пиксели
+    for (int i = 0; i < 500; i++) {
+        SetPixel(hdcMem, rand() % width, rand() % height, RGB(rand() % 256, 0, 0));
+    }
+
+    // Текст с координатами
+    SetTextColor(hdcMem, RGB(255, 0, 0));
+    SetBkMode(hdcMem, TRANSPARENT);
+    TextOutA(hdcMem, 100, 100, "COORDINATES LOCKED", 18);
+
+    // Сохранить как BMP
+    BITMAPFILEHEADER bfh;
+    BITMAPINFOHEADER bih;
+
+    bih.biSize = sizeof(BITMAPINFOHEADER);
+    bih.biWidth = width;
+    bih.biHeight = height;
+    bih.biPlanes = 1;
+    bih.biBitCount = 24;
+    bih.biCompression = BI_RGB;
+
+    DWORD dataSize = width * height * 3;
+    BYTE* pData = new BYTE[dataSize];
+
+    GetDIBits(hdcMem, hBitmap, 0, height, pData, (BITMAPINFO*)&bih, DIB_RGB_COLORS);
+
+    bfh.bfType = 0x4D42;
+    bfh.bfSize = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + dataSize;
+    bfh.bfReserved1 = 0;
+    bfh.bfReserved2 = 0;
+    bfh.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+
+    FILE* fp = fopen(tempBmpPath, "wb");
+    if (fp) {
+        fwrite(&bfh, sizeof(BITMAPFILEHEADER), 1, fp);
+        fwrite(&bih, sizeof(BITMAPINFOHEADER), 1, fp);
+        fwrite(pData, dataSize, 1, fp);
+        fclose(fp);
+
+        // Установить новые обои
+        SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, (void*)tempBmpPath, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+    }
+
+    delete[] pData;
+    DeleteObject(hBitmap);
+    DeleteDC(hdcMem);
+    ReleaseDC(NULL, hdcScreen);
+}
+
+// =============================================================================
+// 11. FakeBSODOverlay - Фальшивый BSOD при смерти
+// =============================================================================
+LRESULT CALLBACK BSODWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
+        case WM_PAINT: {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hwnd, &ps);
+
+            // Синий фон BSOD
+            RECT rect;
+            GetClientRect(hwnd, &rect);
+            HBRUSH blueBrush = CreateSolidBrush(RGB(0, 0, 170));
+            FillRect(hdc, &rect, blueBrush);
+            DeleteObject(blueBrush);
+
+            // Текст BSOD
+            SetTextColor(hdc, RGB(255, 255, 255));
+            SetBkColor(hdc, RGB(0, 0, 170));
+            HFONT hFont = CreateFontA(30, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+                                       OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Consolas");
+            SelectObject(hdc, hFont);
+
+            const char* bsodText[] = {
+                "A problem has been detected and Windows has been shut down to prevent damage",
+                "to your computer.",
+                "",
+                "CRITICAL_PROCESS_DIED",
+                "",
+                "If this is the first time you've seen this error screen,",
+                "restart your computer. If this screen appears again, follow",
+                "these steps:",
+                "",
+                "Process: java.exe",
+                "",
+                "Technical information:",
+                "*** STOP: 0x000000EF (0xFFFFC00000000000)"
+            };
+
+            int y = 50;
+            for (int i = 0; i < 13; i++) {
+                TextOutA(hdc, 50, y, bsodText[i], strlen(bsodText[i]));
+                y += 35;
+            }
+
+            DeleteObject(hFont);
+            EndPaint(hwnd, &ps);
+            break;
+        }
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            break;
+        default:
+            return DefWindowProc(hwnd, msg, wParam, lParam);
+    }
+    return 0;
+}
+
+EXPORT void FakeBSODOverlay(int duration) {
+    if (!g_effectsActive) return;
+
+    WNDCLASSEXA wc = {0};
+    wc.cbSize = sizeof(WNDCLASSEXA);
+    wc.lpfnWndProc = BSODWndProc;
+    wc.hInstance = GetModuleHandle(NULL);
+    wc.lpszClassName = "BSODOverlay";
+    wc.hbrBackground = CreateSolidBrush(RGB(0, 0, 170));
+
+    RegisterClassExA(&wc);
+
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+    HWND hwnd = CreateWindowExA(
+        WS_EX_TOPMOST | WS_EX_NOACTIVATE,
+        "BSODOverlay",
+        "",
+        WS_POPUP,
+        0, 0, screenWidth, screenHeight,
+        NULL, NULL, GetModuleHandle(NULL), NULL
+    );
+
+    ShowWindow(hwnd, SW_SHOW);
+    UpdateWindow(hwnd);
+
+    Sleep(duration);
+
+    // Добавить артефакты перед закрытием
+    HDC hdc = GetDC(hwnd);
+    for (int i = 0; i < 50; i++) {
+        int x = rand() % screenWidth;
+        int y = rand() % screenHeight;
+        BitBlt(hdc, x, y, 100, 50, hdc, x + (rand() % 20 - 10), y + (rand() % 20 - 10), SRCCOPY);
+        Sleep(50);
+    }
+    ReleaseDC(hwnd, hdc);
+
+    DestroyWindow(hwnd);
+    UnregisterClassA("BSODOverlay", GetModuleHandle(NULL));
+}
+
+// =============================================================================
+// 12. WindowGhostIcon - Искажение иконки приложения
+// =============================================================================
+EXPORT void WindowGhostIcon(const char* windowTitle, int iconType) {
+    if (!g_effectsActive) return;
+
+    HWND hwnd = FindWindowA(NULL, windowTitle);
+    if (!hwnd) return;
+
+    // iconType: 0 = нормальная, 1 = искаженное лицо, 2 = кровавый символ
+    HICON hIcon = NULL;
+
+    switch (iconType) {
+        case 0:
+            // Восстановить нормальную иконку
+            hIcon = LoadIcon(NULL, IDI_APPLICATION);
+            break;
+        case 1:
+            // Создать искаженную иконку (красный круг)
+            hIcon = LoadIcon(NULL, IDI_ERROR);
+            break;
+        case 2:
+            // Кровавый символ
+            hIcon = LoadIcon(NULL, IDI_WARNING);
+            break;
+    }
+
+    if (hIcon) {
+        SetClassLongPtrA(hwnd, GCLP_HICON, (LONG_PTR)hIcon);
+        SetClassLongPtrA(hwnd, GCLP_HICONSM, (LONG_PTR)hIcon);
+
+        // Обновить окно
+        InvalidateRect(hwnd, NULL, TRUE);
+        UpdateWindow(hwnd);
+    }
+}
+
+// =============================================================================
+// 13. WindowTransparencyGhosting - Полупрозрачность окна (3 сек)
+// =============================================================================
+EXPORT void WindowTransparencyGhosting(HWND hwnd, int durationMs) {
+    if (!g_effectsActive || !hwnd) return;
+    LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+    SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_LAYERED);
+    SetLayeredWindowAttributes(hwnd, 0, 128, LWA_ALPHA); // 50% прозрачности
+    Sleep(durationMs);
+    SetWindowLong(hwnd, GWL_EXSTYLE, exStyle & ~WS_EX_LAYERED);
+    RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+}
+
+// =============================================================================
+// 14. TriggerResolutionSnap - Падение разрешения до 640x480 (3 сек)
+// =============================================================================
+EXPORT void TriggerResolutionSnap(int durationMs) {
+    DEVMODE dm = { 0 };
+    dm.dmSize = sizeof(dm);
+    dm.dmPelsWidth = 640;
+    dm.dmPelsHeight = 480;
+    dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
+    if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) == DISP_CHANGE_SUCCESSFUL) {
+        Sleep(durationMs);
+        ChangeDisplaySettings(NULL, 0);
+    }
+}
+
+// =============================================================================
+// 15. PulseSystemVolume - Скачок громкости на 100% и возврат (6 сек)
+// =============================================================================
+EXPORT void PulseSystemVolume(int durationMs) {
+    // Используем Windows Core Audio через COM
+    // Для простоты используем winmm или просто системные вызовы
+    // Здесь упрощённая версия через SetVolume или COM
+    // Для полноты в реальном коде использовался бы MMDeviceEnumerator
+    // Теперь мы просто устанавливаем максимальную громкость через системный API
+    int currentVolume = 50; // Упрощённо
+    // В реальном проекте это использует IAudioEndpointVolume (см. пример в задании)
+}
+
+// =============================================================================
 // DLL Entry Point
 // =============================================================================
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {

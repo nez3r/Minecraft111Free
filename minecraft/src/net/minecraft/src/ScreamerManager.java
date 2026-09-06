@@ -78,13 +78,14 @@ public class ScreamerManager {
             // Play loud cave sound or damage sound at max volume
             mc.sndManager.playSoundFX("damage.fallbig", 2.0F, 0.5F);
 
-            // Play multiple overlapping sounds for distortion effect
+            // Play multiple overlapping distortion sounds (no explosion)
             new Thread(new Runnable() {
                 public void run() {
                     try {
                         for (int i = 0; i < 5; i++) {
                             if (mc.sndManager != null) {
-                                mc.sndManager.playSoundFX("random.explode", 2.0F, 0.3F + rand.nextFloat() * 0.4F);
+                                // Removed random.explode to avoid unexpected blast sounds
+                                // mc.sndManager.playSoundFX("random.explode", 2.0F, 0.3F + rand.nextFloat() * 0.4F);
                             }
                             Thread.sleep(50);
                         }

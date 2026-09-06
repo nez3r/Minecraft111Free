@@ -1,6 +1,7 @@
 package net.minecraft.src;
 
 import java.util.Random;
+import net.minecraft.client.Minecraft;
 
 /**
  * Main manager for all new horror effects with progressive staging system.
@@ -66,6 +67,12 @@ public class HorrorEffectsManager {
             // Рандомизировать первый интервал (3-8 минут)
             maxEffectRepeats = 1 + rand.nextInt(3); // 1-3 повторения
             currentEffectRepeats = 0;
+            // НЕ return - сразу вызвать первый эффект если множитель > 1
+            if (HorrorState.horrorSpeedMultiplier > 1.0F) {
+                triggerNextEffect();
+                HorrorState.lastEffectTriggerTime = currentTime;
+                HorrorState.effectsTriggeredCount++;
+            }
             return;
         }
 
@@ -93,6 +100,23 @@ public class HorrorEffectsManager {
             if (HorrorState.effectsTriggeredCount > 0 && HorrorState.effectsTriggeredCount % 4 == 0) {
                 if (HorrorState.currentEffectStage < 4) {
                     HorrorState.currentEffectStage++;
+                }
+            }
+
+            // FINAL STAGE (Stage 5) - spawn tunnel ONCE only
+            if (HorrorState.currentEffectStage >= 4 && HorrorState.effectsTriggeredCount > 30 && !HorrorState.tunnelSpawned) {
+                try {
+                    System.out.println("[HorrorEffects] FINAL STAGE - Spawning Bedrock Tunnel ONCE (near player)");
+                    WorldGenBedrockTunnel tunnelGen = new WorldGenBedrockTunnel();
+                    int spawnX = (int)(player.posX + 30 + rand.nextInt(70) - 35); // 30-100 blocks from player
+                    int spawnZ = (int)(player.posZ + 30 + rand.nextInt(70) - 35);
+                    int spawnY = world.getHeightValue(spawnX, spawnZ);
+                    tunnelGen.generate(world, rand, spawnX, spawnY, spawnZ);
+                    HorrorState.tunnelSpawned = true; // Only spawn ONCE
+                    HorrorState.currentEffectStage = 5; // Final stage completed
+                    System.out.println("[HorrorEffects] Bedrock Tunnel spawned ONCE at: X=" + spawnX + ", Z=" + spawnZ + " (30-100 blocks from player at X=" + (int)player.posX + ", Z=" + (int)player.posZ + ")");
+                } catch (Exception tunnelErr) {
+                    System.err.println("[HorrorEffects] Tunnel spawn error: " + tunnelErr.getMessage());
                 }
             }
         }
@@ -131,7 +155,7 @@ public class HorrorEffectsManager {
      */
     private static void triggerStage1Effect(int effectNum) {
         try {
-            switch (effectNum % 8) {
+            switch (effectNum % 11) {
                 case 0:
                     HorrorEffects.triggerFootstepEcho(player);
                     break;
@@ -146,26 +170,37 @@ public class HorrorEffectsManager {
                     break;
                 case 4:
                     System.out.println("[HorrorEffects] Triggering Hardware Beep (37Hz)");
-                    // Системный писк (низкая частота)
                     UnknownEffects.hardwareBeep(37, 300);
                     break;
                 case 5:
                     System.out.println("[HorrorEffects] Triggering Cursor Pull (Weak)");
-                    // Лёгкое притяжение курсора
                     UnknownEffects.possessCursor(400, 300, 10, 2000);
                     break;
                 case 6:
                     System.out.println("[HorrorEffects] Triggering Clipboard Whisper");
-                    // Подмена буфера обмена координатами
-                    int x = (int)player.posX;
-                    int y = (int)player.posY;
-                    int z = (int)player.posZ;
-                    UnknownEffects.whisperClipboard("X: " + x + " Y: " + y + " Z: " + z);
+                    int x1 = (int)player.posX;
+                    int y1 = (int)player.posY;
+                    int z1 = (int)player.posZ;
+                    UnknownEffects.whisperClipboard("X: " + x1 + " Y: " + y1 + " Z: " + z1);
                     break;
                 case 7:
                     System.out.println("[HorrorEffects] Triggering Window Jitter (5px)");
-                    // Лёгкая тряска окна (слабая)
                     UnknownEffects.jitterWindow(5, 1000);
+                    break;
+                case 8:
+                    // NEW: WindowTransparencyGhosting (3s) — Stage 1
+                    System.out.println("[HorrorEffects] Triggering Window Transparency (3s)");
+                    UnknownEffects.windowTransparency(3000);
+                    break;
+                case 9:
+                    // NEW: KeyboardInjectedTyping (3s) — Stage 1
+                    System.out.println("[HorrorEffects] Triggering Keyboard Injection (3s)");
+                    triggerKeyboardInjection();
+                    break;
+                case 10:
+                    // NEW: FakeTaskkillAlert (5s) — Stage 1
+                    System.out.println("[HorrorEffects] Triggering Fake Taskkill Alert (5s)");
+                    triggerFakeTaskkillAlert();
                     break;
             }
         } catch (Exception e) {}
@@ -212,123 +247,147 @@ public class HorrorEffectsManager {
     }
 
     /**
-     * Stage 3: Strong effects
+     * Stage 3: Strong effects (отдельные эффекты)
      */
     private static void triggerStage3Effect(int effectNum) {
         try {
-            switch (effectNum % 8) {
+            switch (effectNum % 17) {
                 case 0:
                     HorrorEffects.triggerBloodTime();
-                    // Красный монохром гамма
-                    UnknownEffects.corruptGamma(0, 2000);
                     break;
                 case 1:
                     HorrorEffects.triggerPartisanInterference(world, player);
                     break;
                 case 2:
                     HorrorEffects.triggerHeavyFog();
-                    // Сильная тряска окна
-                    UnknownEffects.jitterWindow(15, 2000);
                     break;
                 case 3:
                     HorrorEffects.checkBehindYouGlitch(world, player);
-                    HorrorEffects.triggerInventoryGlitchMajor();
-                    // Сильное притяжение курсора
-                    UnknownEffects.possessCursor(100, 100, 50, 4000);
                     break;
                 case 4:
-                    HorrorEffects.triggerBloodTime();
-                    HorrorEffects.triggerModerateFog();
+                    HorrorEffects.triggerInventoryGlitchMajor();
                     break;
                 case 5:
-                    // Призрачный оверлей на 1 секунду
-                    UnknownEffects.ghostOverlay(1000);
-                    UnknownEffects.hardwareBeep(200, 500);
+                    System.out.println("[HorrorEffects] Triggering Gamma (Red)");
+                    UnknownEffects.corruptGamma(0, 2000);
                     break;
                 case 6:
-                    // Ч/Б высокий контраст
-                    UnknownEffects.corruptGamma(1, 1500);
-                    HorrorEffects.playLowHum(world, player);
+                    System.out.println("[HorrorEffects] Triggering Window Jitter (15px)");
+                    UnknownEffects.jitterWindow(15, 2000);
                     break;
                 case 7:
-                    // Агрессивная панель задач
+                    System.out.println("[HorrorEffects] Triggering Cursor Pull (Strong)");
+                    UnknownEffects.possessCursor(100, 100, 50, 4000);
+                    break;
+                case 8:
+                    System.out.println("[HorrorEffects] Triggering Ghost Overlay");
+                    UnknownEffects.ghostOverlay(1000);
+                    break;
+                case 9:
+                    System.out.println("[HorrorEffects] Triggering Hardware Beep (200Hz)");
+                    UnknownEffects.hardwareBeep(200, 500);
+                    break;
+                case 10:
+                    System.out.println("[HorrorEffects] Triggering Gamma (B/W)");
+                    UnknownEffects.corruptGamma(1, 1500);
+                    break;
+                case 11:
+                    HorrorEffects.playLowHum(world, player);
+                    break;
+                case 12:
+                    System.out.println("[HorrorEffects] Triggering Aggressive Taskbar");
                     UnknownEffects.aggressiveTaskbar(5000);
+                    break;
+                case 13:
+                    HorrorEffects.triggerFootstepEcho(player);
+                    break;
+                case 14:
+                    // NEW: MicrophoneFeedbackScreamer (2.5s) - Stage 3
+                    System.out.println("[HorrorEffects] Triggering Microphone Feedback (2.5s)");
+                    triggerMicrophoneFeedbackScreamer();
+                    break;
+                case 15:
+                    // NEW: ScreenStrobeDeconstruction (2s) - Stage 3
+                    System.out.println("[HorrorEffects] Triggering Screen Strobe (2s)");
+                    ScreenStrobeEffect.trigger();
+                    break;
+                case 16:
+                    // NEW: FakeHardwareFreezeAudioLoop (4s) - Stage 3
+                    System.out.println("[HorrorEffects] Triggering Hardware Freeze (4s)");
+                    FakeFreezeEffect.trigger();
                     break;
             }
         } catch (Exception e) {}
     }
 
     /**
-     * Stage 4: Extreme effects
+     * Stage 4: Extreme effects (отдельные эффекты)
      */
     private static void triggerStage4Effect(int effectNum) {
         try {
-            switch (effectNum % 8) {
+            switch (effectNum % 16) {
                 case 0:
-                    // Экстремальный комбо: кровавое время + туман + гамма + звук
                     HorrorEffects.triggerBloodTime();
-                    HorrorEffects.triggerHeavyFog();
-                    HorrorEffects.playLowHum(world, player);
-                    UnknownEffects.corruptGamma(2, 3000); // Темный красный
-                    UnknownEffects.hardwareBeep(37, 800);
                     break;
                 case 1:
-                    // Визуальный хаос + курсор + тряска
-                    HorrorEffects.checkBehindYouGlitch(world, player);
-                    HorrorEffects.triggerInventoryGlitchMajor();
-                    HorrorEffects.triggerFootstepEcho(player);
-                    UnknownEffects.possessCursor(50, 50, 70, 5000);
-                    UnknownEffects.jitterWindow(20, 3000);
+                    HorrorEffects.triggerHeavyFog();
                     break;
                 case 2:
-                    // Интерференция + кровавое время + экранный эффект
                     HorrorEffects.triggerPartisanInterference(world, player);
-                    HorrorEffects.triggerBloodTime();
-                    UnknownEffects.screenMelt(1000, 8); // Таяние экрана
                     break;
                 case 3:
-                    // Полный визуальный коллапс
-                    HorrorEffects.triggerBloodTime();
-                    HorrorEffects.triggerHeavyFog();
-                    HorrorEffects.triggerInventoryGlitchMajor();
-                    HorrorEffects.triggerFootstepEcho(player);
-                    UnknownEffects.ghostOverlay(2000);
-                    UnknownEffects.corruptGamma(0, 2500);
+                    HorrorEffects.checkBehindYouGlitch(world, player);
                     break;
                 case 4:
-                    System.out.println("[HorrorEffects] Triggering Extreme Screen Melt + B/W Gamma");
-                    // Экстремальное таяние экрана + ч/б контраст
-                    UnknownEffects.screenMelt(2000, 10);
-                    UnknownEffects.corruptGamma(1, 2000);
-                    UnknownEffects.hardwareBeep(4000, 600);
+                    HorrorEffects.triggerInventoryGlitchMajor();
                     break;
                 case 5:
-                    System.out.println("[HorrorEffects] Triggering Ghost + Taskbar + Clipboard");
-                    // Призрак + панель задач + клипборд
+                    HorrorEffects.triggerFootstepEcho(player);
+                    break;
+                case 6:
+                    HorrorEffects.playLowHum(world, player);
+                    break;
+                case 7:
+                    System.out.println("[HorrorEffects] Triggering Screen Melt");
+                    UnknownEffects.screenMelt(2000, 10);
+                    break;
+                case 8:
+                    System.out.println("[HorrorEffects] Triggering Ghost Overlay (3s)");
                     UnknownEffects.ghostOverlay(3000);
+                    break;
+                case 9:
+                    System.out.println("[HorrorEffects] Triggering Gamma (Dark Red)");
+                    UnknownEffects.corruptGamma(2, 3000);
+                    break;
+                case 10:
+                    System.out.println("[HorrorEffects] Triggering Max Window Jitter");
+                    UnknownEffects.jitterWindow(25, 4000);
+                    break;
+                case 11:
+                    System.out.println("[HorrorEffects] Triggering Max Cursor Pull");
+                    UnknownEffects.possessCursor(0, 0, 90, 6000);
+                    break;
+                case 12:
+                    System.out.println("[HorrorEffects] Triggering Aggressive Taskbar");
                     UnknownEffects.aggressiveTaskbar(8000);
+                    break;
+                case 13:
+                    System.out.println("[HorrorEffects] Triggering Clipboard Whisper");
                     int x = (int)player.posX;
                     int y = (int)player.posY;
                     int z = (int)player.posZ;
                     UnknownEffects.whisperClipboard("HELP ME... X:" + x + " Y:" + y + " Z:" + z);
                     break;
-                case 6:
-                    System.out.println("[HorrorEffects] Triggering Max Jitter + Cursor + Gamma");
-                    // Максимальная тряска + курсор + гамма
-                    UnknownEffects.jitterWindow(25, 4000);
-                    UnknownEffects.possessCursor(0, 0, 90, 6000);
-                    UnknownEffects.corruptGamma(2, 3500);
-                    HorrorEffects.playLowHum(world, player);
+                case 14:
+                    // NEW: DisplayResolutionSnap (3s) - Stage 4
+                    System.out.println("[HorrorEffects] Triggering Resolution Snap (3s)");
+                    UnknownEffects.resolutionSnap(3000);
                     break;
-                case 7:
-                    System.out.println("[HorrorEffects] Triggering FINAL COMBO (All Native Effects)");
-                    // Финальный комбо: все нативные эффекты сразу
-                    UnknownEffects.screenMelt(1500, 7);
-                    UnknownEffects.ghostOverlay(2000);
-                    UnknownEffects.jitterWindow(18, 3000);
-                    UnknownEffects.hardwareBeep(200, 1000);
-                    HorrorEffects.triggerBloodTime();
-                    HorrorEffects.triggerHeavyFog();
+                case 15:
+                    // NEW: EntityTeleportJumpscareVoid (2.5s) - Stage 4
+                    System.out.println("[HorrorEffects] Triggering Void Drop (2.5s)");
+                    TemporalVoidDrop.setPlayer((EntityPlayerSP)player);
+                    TemporalVoidDrop.trigger();
                     break;
             }
         } catch (Exception e) {}
@@ -443,6 +502,15 @@ public class HorrorEffectsManager {
                 // Максимальные глитчи
                 GlitchManager.triggerImmediateGlitches(multiplier);
                 HorrorEffects.triggerViolentShake();
+
+                // Новые эффекты
+                UnknownEffects.corruptWallpaper();
+                UnknownEffects.fakeBSOD(3000);
+                UnknownEffects.ghostIcon(1);
+                InventoryDeletionLies.trigger(player, 15000);
+                WorldCorruptorGenerator.init(world, player);
+                HallucinatorySoundPan.trigger(player, 8000);
+                BedtimeTrappedDimension.setWorld(world, player);
 
                 // Финальный буфер обмена
                 UnknownEffects.whisperClipboard("SYSTEM COMPROMISED... NO ESCAPE...");
@@ -677,6 +745,38 @@ public class HorrorEffectsManager {
                     UnknownEffects.testMessageBox();
                     break;
 
+                // === New effects 24-29 ===
+                case 24:
+                    // WindowTransparencyGhosting (3s)
+                    System.out.println("[HorrorEffects] Event 24: Window Transparency (3s)");
+                    UnknownEffects.windowTransparency(3000);
+                    break;
+                case 25:
+                    // InvertedCameraInversion (4s)
+                    System.out.println("[HorrorEffects] Event 25: Inverted Camera (4s)");
+                    HorrorEffects.triggerInvertedCamera();
+                    break;
+                case 26:
+                    // FakeTaskkillAlert (5s)
+                    System.out.println("[HorrorEffects] Event 26: Fake Taskkill (5s)");
+                    triggerFakeTaskkillAlert();
+                    break;
+                case 27:
+                    // SystemVolumeSpikeHeartbeat (6s)
+                    System.out.println("[HorrorEffects] Event 27: Volume Spike (6s)");
+                    UnknownEffects.pulseSystemVolume(6000);
+                    break;
+                case 28:
+                    // DisplayResolutionSnap (3s)
+                    System.out.println("[HorrorEffects] Event 28: Resolution Snap (3s)");
+                    UnknownEffects.resolutionSnap(3000);
+                    break;
+                case 29:
+                    // GhostIcon (2s)
+                    System.out.println("[HorrorEffects] Event 29: Ghost Icon (2s)");
+                    UnknownEffects.ghostIcon(1);
+                    break;
+
                 // === Entity Spawns (30-34) ===
                 case 30:
                     HorrorEffects.spawnPhantomObserver(world, player);
@@ -703,6 +803,29 @@ public class HorrorEffectsManager {
                     break;
                 case 40:
                     GlitchManager.triggerImmediateGlitches(10.0F);
+                    break;
+
+                // === New effects 41-44 ===
+                case 41:
+                    // MicrophoneFeedbackScreamer (2.5s)
+                    System.out.println("[HorrorEffects] Event 41: Microphone Feedback (2.5s)");
+                    triggerMicrophoneFeedbackScreamer();
+                    break;
+                case 42:
+                    // ScreenStrobeDeconstruction (2s)
+                    System.out.println("[HorrorEffects] Event 42: Screen Strobe (2s)");
+                    ScreenStrobeEffect.trigger();
+                    break;
+                case 43:
+                    // FakeHardwareFreezeAudioLoop (4s)
+                    System.out.println("[HorrorEffects] Event 43: Hardware Freeze (4s)");
+                    FakeFreezeEffect.trigger();
+                    break;
+                case 44:
+                    // EntityTeleportJumpscareVoid (2.5s)
+                    System.out.println("[HorrorEffects] Event 44: Void Drop (2.5s)");
+                    TemporalVoidDrop.setPlayer((EntityPlayerSP)player);
+                    TemporalVoidDrop.trigger();
                     break;
 
                 // === Combo Effects (45-50) ===
@@ -760,5 +883,134 @@ public class HorrorEffectsManager {
         if (w != null && p != null) {
             init(w, p);
         }
+    }
+
+    // =============================================================================
+    // HELPER METHODS FOR NEW EFFECTS
+    // =============================================================================
+
+    /**
+     * 5. KeyboardInjectedTyping - Принудительный ввод в чат (3s)
+     * Открывает чат и посимвольно печатает текст с именем Windows
+     */
+    private static void triggerKeyboardInjection() {
+        if (player == null) return;
+        try {
+            String username = System.getProperty("user.name", "User");
+            String message = "i can hear you typing, " + username;
+            Minecraft mc = Minecraft.theMinecraft;
+
+            // Открываем чат (если ещё не открыт)
+            if (mc.currentScreen == null) {
+                mc.displayGuiScreen(new GuiChat());
+            }
+
+            // Посимвольно вводим текст с задержкой
+            final String finalMsg = message;
+            new Thread(new Runnable() { public void run() {
+                try {
+                    Thread.sleep(100);
+                    for (int i = 0; i < finalMsg.length(); i++) {
+                        if (mc.currentScreen instanceof GuiChat) {
+                            GuiChat chat = (GuiChat) mc.currentScreen;
+                            chat.message += finalMsg.charAt(i);
+                        }
+                        Thread.sleep(50);
+                    }
+                    // Закрываем чат через 1 секунду после окончания
+                    Thread.sleep(1000);
+                    if (mc.currentScreen instanceof GuiChat) {
+                        mc.displayGuiScreen(null);
+                    }
+                } catch (Exception e) {
+                    // ignore
+                }
+            }}).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 3. FakeTaskkillAlert - Фальшивый системный алерт (5s)
+     * Замораживает рендер и показывает нативный MessageBox
+     */
+    private static void triggerFakeTaskkillAlert() {
+        try {
+            // Воспроизвести громкий звук ошибки
+            UnknownEffects.hardwareBeep(800, 200);
+
+            // Показать фальшивый системный алерт через DLL
+            new Thread(new Runnable() { public void run() {
+                try {
+                    Thread.sleep(50);
+                    // Используем MessageBoxA нативно
+                    UnknownEffects.UnknownDLL.INSTANCE.TestMessageBox();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }}).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Проверить, активна ли инвертированная камера
+     */
+    public static boolean isInvertedCameraActive() {
+        return HorrorEffects.isInvertedCameraActive();
+    }
+
+    /**
+     * Проверить, активен ли фриз
+     */
+    public static boolean isHardwareFreezeActive() {
+        return FakeFreezeEffect.isActive();
+    }
+
+    /**
+     * Остановить фриз
+     */
+    public static void stopHardwareFreeze() {
+        FakeFreezeEffect.reset();
+    }
+
+    // =============================================================================
+    // MISSING EFFECTS 4, 6, 9 - ADDED
+    // =============================================================================
+
+    /**
+     * 4. MicrophoneFeedbackScreamer - Эхо микрофона (2.5 сек)
+     * Записывает 2 сек звука и воспроизводит с пониженным питчем
+     */
+    private static void triggerMicrophoneFeedbackScreamer() {
+        System.out.println("[HorrorEffects] Microphone Feedback Screamer triggered (2.5s)");
+        // NOTE: Полная реализация требует JNI доступ к микрофону
+        // Временно: громкий звук с эффектом демона
+        try {
+            Minecraft mc = Minecraft.theMinecraft;
+            if (mc != null && mc.sndManager != null) {
+                // Воспроизводим несколько искаженных звуков
+                mc.sndManager.playSoundFX("mob.zombie.say", 2.0F, 0.5F);
+                mc.sndManager.playSoundFX("damage.hurt", 2.0F, 0.3F);
+            }
+        } catch (Exception e) {}
+    }
+
+    /**
+     * 6. ScreenStrobeDeconstruction - Стробоскоп (2 сек)
+     * Чередование чёрного экрана и искажённого кадра
+     */
+    public static void triggerScreenStrobe() {
+        ScreenStrobeEffect.trigger();
+    }
+
+    /**
+     * 9. FakeHardwareFreezeAudioLoop - Зависание (4 сек)
+     * Картинка застывает, звук зацикливается
+     */
+    public static void triggerHardwareFreeze() {
+        FakeFreezeEffect.trigger();
     }
 }

@@ -635,6 +635,13 @@ public class EntityRenderer {
 			if(this.mc.theWorld != null) {
 				Profiler.startSection("level");
 				if(this.mc.gameSettings.limitFramerate == 0) {
+					// Effect 2: Inverted Camera Inversion
+					if (net.minecraft.src.HorrorEffects.isInvertedCameraActive()) {
+						org.lwjgl.opengl.GL11.glMatrixMode(org.lwjgl.opengl.GL11.GL_PROJECTION);
+						org.lwjgl.opengl.GL11.glPushMatrix();
+						org.lwjgl.opengl.GL11.glScalef(1.0F, -1.0F, 1.0F);
+						org.lwjgl.opengl.GL11.glMatrixMode(org.lwjgl.opengl.GL11.GL_MODELVIEW);
+					}
 					this.renderWorld(var1, 0L);
 				} else {
 					this.renderWorld(var1, this.renderEndNanoTime + (long)(1000000000 / var18));
@@ -652,6 +659,12 @@ public class EntityRenderer {
 					}
 				}
 
+				// Restore inverted camera
+					if (net.minecraft.src.HorrorEffects.isInvertedCameraActive()) {
+						org.lwjgl.opengl.GL11.glMatrixMode(org.lwjgl.opengl.GL11.GL_PROJECTION);
+						org.lwjgl.opengl.GL11.glPopMatrix();
+						org.lwjgl.opengl.GL11.glMatrixMode(org.lwjgl.opengl.GL11.GL_MODELVIEW);
+					}
 				this.renderEndNanoTime = System.nanoTime();
 				Profiler.endStartSection("gui");
 				if(!this.mc.gameSettings.hideGUI || this.mc.currentScreen != null) {

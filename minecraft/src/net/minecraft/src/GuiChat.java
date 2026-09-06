@@ -126,6 +126,8 @@ public class GuiChat extends GuiScreen {
 							float multiplier = Float.parseFloat(multiplierStr);
 							if(multiplier >= 0.1F && multiplier <= 100.0F) {
 								HorrorState.horrorSpeedMultiplier = multiplier;
+								// \u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u0442\u0430\u0439\u043c\u0435\u0440 \u0447\u0442\u043e\u0431\u044b \u044d\u0444\u0444\u0435\u043a\u0442\u044b \u0441\u0440\u0430\u0431\u043e\u0442\u0430\u043b\u0438 \u0441\u0440\u0430\u0437\u0443
+								HorrorState.lastEffectTriggerTime = 0;
 								this.mc.thePlayer.addChatMessage("\u00a7eHorror speed set to x" + multiplier);
 								this.mc.thePlayer.addChatMessage("\u00a7eEffects will appear " + multiplier + "x faster");
 							} else {

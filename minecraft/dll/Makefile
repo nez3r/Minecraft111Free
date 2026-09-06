@@ -28,12 +28,13 @@ $(TARGET): $(OBJECTS)
 
 # Очистка
 clean:
-	rm -f *.o $(TARGET)
+	rm *.o $(TARGET)
 
 # Установка (копирование в нужную директорию)
 install: $(TARGET)
+	rm -f ../../libraries/natives/Unknown.dll
 	mkdir -p ../../libraries/natives
-	cp Unknown.dll ../../libraries/natives/Unknown.dll
+	cp -f Unknown.dll ../../libraries/natives/Unknown.dll
 	@echo "DLL installed to libraries/natives/"
 
 .PHONY: all clean install

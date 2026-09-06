@@ -45,6 +45,18 @@ public class HorrorIntegration {
         try {
             DisappearingAnomalies.tick();
         } catch (Exception e) {}
+        try {
+            InventoryDeletionLies.tick();
+        } catch (Exception e) {}
+        try {
+            WorldCorruptorGenerator.tick();
+        } catch (Exception e) {}
+        try {
+            HallucinatorySoundPan.tick();
+        } catch (Exception e) {}
+        try {
+            BedtimeTrappedDimension.tick();
+        } catch (Exception e) {}
     }
 
     /**
