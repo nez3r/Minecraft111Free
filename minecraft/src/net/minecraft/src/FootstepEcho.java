@@ -39,12 +39,13 @@ public class FootstepEcho {
         if (isMoving) {
             wasMoving = true;
             stopTime = System.currentTimeMillis();
-            // Schedule an echo when they stop
+        } else if (wasMoving) {
+            wasMoving = false;
             if (!echoScheduled) {
                 scheduleEcho();
             }
-        } else if (wasMoving && echoScheduled) {
-            // Player just stopped - check if echo should play
+        }
+        if (!isMoving && echoScheduled) {
             checkEchoPlayback();
         }
     }

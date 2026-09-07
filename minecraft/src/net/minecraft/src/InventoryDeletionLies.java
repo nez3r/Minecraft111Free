@@ -15,6 +15,7 @@ public class InventoryDeletionLies {
 
     private static EntityPlayer player;
     private static Random rand = new Random();
+    private static boolean[] hiddenSlots = new boolean[9];
 
     /**
      * Активировать эффект фальшивого удаления
@@ -37,8 +38,13 @@ public class InventoryDeletionLies {
      */
     public static void tick() {
         if (!active || player == null) return;
+        if (player.worldObj == null || player.isDead) {
+            reset();
+            return;
+        }
         if (HorrorState.safeMode) {
             active = false;
+            clearHiddenSlots();
             return;
         }
 
@@ -78,6 +84,7 @@ public class InventoryDeletionLies {
         // В реальности мы не можем изменить рендеринг инвентаря отсюда,
         // поэтому просто записываем в лог и воспроизводим звук
         System.out.println("[InventoryDeletionLies] Faking deletion of slot " + slot);
+        if (slot >= 0 && slot < hiddenSlots.length) hiddenSlots[slot] = true;
     }
 
     /**
@@ -94,12 +101,25 @@ public class InventoryDeletionLies {
         active = false;
         currentSlot = 0;
         lastDeleteTime = 0;
+        clearHiddenSlots();
+        endTime = 0;
     }
 
     /**
      * Установить игрока
      */
     public static void setPlayer(EntityPlayer p) {
+        if (player != p) clearHiddenSlots();
         player = p;
+    }
+
+    public static boolean isSlotHidden(Slot slot) {
+        if (!isActive() || player == null || slot == null || slot.inventory != player.inventory) return false;
+        if (slot.slotNumber < 36 || slot.slotNumber >= 45) return false;
+        return hiddenSlots[slot.slotNumber - 36];
+    }
+
+    private static void clearHiddenSlots() {
+        for (int i = 0; i < hiddenSlots.length; i++) hiddenSlots[i] = false;
     }
 }

@@ -65,6 +65,12 @@ public class SoundManager {
 				resourcesDir = new File("game/resources");
 			}
 			if (!resourcesDir.exists()) {
+				resourcesDir = new File("../resources");
+			}
+			if (!resourcesDir.exists()) {
+				resourcesDir = new File("../minecraft/resources");
+			}
+			if (!resourcesDir.exists()) {
 				return;
 			}
 
@@ -206,8 +212,23 @@ public class SoundManager {
 					sndSystem.setVolume(var7, 0.5F * this.options.soundVolume);
 					sndSystem.play(var7);
 				}
-
 			}
+		}
+	}
+
+	/**
+	 * Stop the active streaming track before the final tunnel crash sequence.
+	 */
+	public void stopStreaming() {
+		if(!loaded) {
+			return;
+		}
+
+		if(sndSystem.playing("streaming")) {
+			sndSystem.stop("streaming");
+		}
+		if(sndSystem.playing("BgMusic")) {
+			sndSystem.stop("BgMusic");
 		}
 	}
 
@@ -245,13 +266,51 @@ public class SoundManager {
 				if(var2 > 1.0F) {
 					var2 = 1.0F;
 				}
-
 				var2 *= 0.25F;
 				sndSystem.setPitch(var5, var3);
 				sndSystem.setVolume(var5, var2 * this.options.soundVolume);
 				sndSystem.play(var5);
 			}
 
+		}
+	}
+
+	public void playHorrorEffectSound(String var1, float var2, long var3) {
+		if(!loaded || this.options.soundVolume == 0.0F) {
+			return;
+		}
+
+		SoundPoolEntry var4 = this.soundPoolSounds.getRandomSoundFromSoundPool(var1);
+		if(var4 == null) {
+			return;
+		}
+
+		final String var5 = "horror_effect";
+		final long var6 = var3;
+		if(sndSystem.playing(var5)) {
+			sndSystem.stop(var5);
+		}
+
+		sndSystem.newSource(false, var5, var4.soundUrl, var4.soundName, false,
+			0.0F, 0.0F, 0.0F, 0, 16.0F);
+		sndSystem.setVolume(var5, var2 * this.options.soundVolume);
+		sndSystem.play(var5);
+
+		if(var6 > 0L) {
+			Thread var7 = new Thread(new Runnable() {
+				public void run() {
+					try {
+						Thread.sleep(var6);
+						if(sndSystem != null && sndSystem.playing(var5)) {
+							sndSystem.stop(var5);
+						}
+					} catch (InterruptedException var1) {
+						Thread.currentThread().interrupt();
+					}
+				}
+			}, "HorrorEffectSoundStop");
+			var7.setDaemon(true);
+			var7.start();
 		}
 	}
 }

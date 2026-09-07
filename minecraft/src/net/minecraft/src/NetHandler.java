@@ -196,6 +196,10 @@ public abstract class NetHandler {
 		this.registerPacket(var1);
 	}
 
+	public void handleHorrorEvent(Packet72HorrorEvent var1) {
+		this.registerPacket(var1);
+	}
+
 	public void handleItemData(Packet131MapData var1) {
 		this.registerPacket(var1);
 	}

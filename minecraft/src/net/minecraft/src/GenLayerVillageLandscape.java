@@ -23,7 +23,7 @@ public class GenLayerVillageLandscape extends GenLayer {
 				} else if(var9 == 1) {
 					var6[var8 + var7 * var3] = this.allowedBiomes[this.nextInt(this.allowedBiomes.length)].biomeID;
 				} else {
-					var6[var8 + var7 * var3] = BiomeGenBase.icePlains.biomeID;
+					var6[var8 + var7 * var3] = this.allowedBiomes[this.nextInt(this.allowedBiomes.length)].biomeID;
 				}
 			}
 		}

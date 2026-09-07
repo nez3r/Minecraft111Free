@@ -32,6 +32,7 @@ public class GuiIngame extends Gui {
 		FontRenderer var8 = this.mc.fontRenderer;
 		this.mc.entityRenderer.setupOverlayRendering();
 		GL11.glEnable(GL11.GL_BLEND);
+		RenderHorrorEffects.beginHud();
 		if(Minecraft.isFancyGraphicsEnabled()) {
 			this.renderVignette(this.mc.thePlayer.getEntityBrightness(var1), var6, var7);
 		} else {
@@ -429,6 +430,41 @@ public class GuiIngame extends Gui {
 		if(CrashEffectsManager.isActive()) {
 			CrashEffectsManager.update();
 			renderCrashEffects(var6, var7, var8);
+		}
+		RenderHorrorEffects.renderSlicedBands(var6, var7);
+		RenderHorrorEffects.renderGuaranteedOverlay(var6, var7);
+		this.renderReliableHorrorOverlay(var6, var7, var8);
+		RenderHorrorEffects.endHud();
+	}
+
+	private void renderReliableHorrorOverlay(int width, int height, FontRenderer fontRenderer) {
+		int effect = RenderHorrorEffects.getActiveEffect();
+		if(effect == 48) {
+			int sector = (RenderHorrorEffects.getFrame() % 6) * width / 6;
+			this.drawRect(sector, 0, sector + width / 6, height, 0xDD000000);
+			fontRenderer.drawStringWithShadow("YOU CANNOT ESCAPE", sector + 4, height / 2, 0xFFFFFFFF);
+		} else if(effect == 52) {
+			for(int i = 0; i < 6; ++i) {
+				int y = i * height / 6;
+				int offset = ((RenderHorrorEffects.getFrame() * 7 + i * 19) % 60) - 30;
+				this.drawRect(offset, y, width + offset, y + height / 6 - 3, 0xB8000000);
+			}
+			String[] phrases = {
+				"YOU WILL NOT SURVIVE",
+				"YOU CANNOT ESCAPE",
+				"RUN",
+				"LEAVE NOW",
+				"IT IS BEHIND YOU",
+				"DO NOT LOOK BACK"
+			};
+			int phraseIndex = (RenderHorrorEffects.getFrame() / 4) % phrases.length;
+			if((RenderHorrorEffects.getFrame() & 1) == 0) {
+				fontRenderer.drawStringWithShadow(phrases[phraseIndex], 4, 4, 0xFFFF5555);
+			}
+		} else if(effect == 55) {
+			this.drawRect(0, 0, width, 14, 0xFFFFFFFF);
+			this.drawRect(0, height - 14, width, height, 0xFFFFFFFF);
+			fontRenderer.drawStringWithShadow("ALONE", width / 2 - 15, height / 2, 0xFFFFFFFF);
 		}
 	}
 

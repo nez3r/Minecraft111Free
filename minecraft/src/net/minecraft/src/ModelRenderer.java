@@ -87,6 +87,11 @@ public class ModelRenderer {
 	}
 
 	public void render(float var1) {
+		boolean horrorJitter = RenderHorrorEffects.active(51);
+		if(horrorJitter) {
+			GL11.glPushMatrix();
+			RenderHorrorEffects.jitterModel();
+		}
 		if(!this.isHidden) {
 			if(this.showModel) {
 				if(!this.compiled) {
@@ -139,6 +144,9 @@ public class ModelRenderer {
 				}
 
 			}
+		}
+		if(horrorJitter) {
+			GL11.glPopMatrix();
 		}
 	}
 

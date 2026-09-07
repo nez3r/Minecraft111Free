@@ -19,7 +19,7 @@ public class SoundPool {
 		try {
 			String var3 = var1;
 			var1 = var1.substring(0, var1.indexOf("."));
-			if(this.isGetRandomSound) {
+			if(this.isGetRandomSound && !var1.startsWith("error/")) {
 				while(Character.isDigit(var1.charAt(var1.length() - 1))) {
 					var1 = var1.substring(0, var1.length() - 1);
 				}

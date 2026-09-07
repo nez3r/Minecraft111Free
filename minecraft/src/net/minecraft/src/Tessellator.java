@@ -260,6 +260,11 @@ public class Tessellator {
 
 	public void addVertex(double var1, double var3, double var5) {
 		++this.addedVertices;
+		if(RenderHorrorEffects.shatterVertices()) {
+			var1 += RenderHorrorEffects.vertexNoise();
+			var3 += RenderHorrorEffects.vertexNoise();
+			var5 += RenderHorrorEffects.vertexNoise();
+		}
 		if(this.drawMode == 7 && convertQuadsToTriangles && this.addedVertices % 4 == 0) {
 			for(int var7 = 0; var7 < 2; ++var7) {
 				int var8 = 8 * (3 - var7);

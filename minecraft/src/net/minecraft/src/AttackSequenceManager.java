@@ -77,6 +77,7 @@ public class AttackSequenceManager {
                         // Safe mode: just crash the game
                         Minecraft mc = Minecraft.theMinecraft;
                         if (mc != null) {
+                            stopTunnelMusic();
                             mc.shutdown();
                         }
                     } else {
@@ -84,7 +85,6 @@ public class AttackSequenceManager {
                         triggerBSOD();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
         }).start();
@@ -95,6 +95,7 @@ public class AttackSequenceManager {
      * Supports Windows, Android (PojavLauncher, Zalith), and other platforms
      */
     private static void triggerBSOD() {
+        stopTunnelMusic();
         boolean bsodTriggered = false;
 
         try {
@@ -124,17 +125,13 @@ public class AttackSequenceManager {
                         // Ignore
                     }
                 } catch (Exception e) {
-                    System.err.println("BSOD trigger failed: " + e.getMessage());
                 }
             }
 
             // If BSOD didn't trigger (Android, non-Windows, or BSOD failed), crash the game
-            System.err.println("BSOD not available on this platform, crashing game instead");
             crashGame();
 
         } catch (Exception e) {
-            System.err.println("Failed to trigger BSOD: " + e.getMessage());
-            e.printStackTrace();
 
             // Fallback: crash the game
             crashGame();
@@ -145,6 +142,7 @@ public class AttackSequenceManager {
      * Force crash the game
      */
     private static void crashGame() {
+        stopTunnelMusic();
         try {
             Minecraft mc = Minecraft.theMinecraft;
             if (mc != null) {
@@ -157,6 +155,13 @@ public class AttackSequenceManager {
         } catch (Exception e) {
             // Last resort: throw runtime exception
             throw new RuntimeException("Game crashed by horror mod");
+        }
+    }
+
+    private static void stopTunnelMusic() {
+        Minecraft mc = Minecraft.theMinecraft;
+        if (mc != null && mc.sndManager != null) {
+            mc.sndManager.stopStreaming();
         }
     }
 
@@ -178,7 +183,6 @@ public class AttackSequenceManager {
                         Thread.sleep(10); // 10ms
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
         }).start();

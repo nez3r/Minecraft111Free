@@ -3,6 +3,7 @@ package net.minecraft.src;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.Minecraft;
 
 /**
  * Централизованный класс для всех игровых хоррор-эффектов
@@ -20,7 +21,6 @@ public class HorrorEffects {
     public static void triggerFootstepEcho(EntityPlayer player) {
         if (player == null) return;
 
-        System.out.println("[HorrorEffects] Triggering Footstep Echo");
 
         try {
             // Задержанный звук шага (0.5-1 секунда)
@@ -32,7 +32,6 @@ public class HorrorEffects {
                 delay
             ));
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -64,13 +63,11 @@ public class HorrorEffects {
     private static long inventoryGlitchEnd = 0;
 
     public static void triggerInventoryGlitchMinor() {
-        System.out.println("[HorrorEffects] Triggering Inventory Glitch (Minor)");
         inventoryGlitchActive = true;
         inventoryGlitchEnd = System.currentTimeMillis() + 3000; // 3 секунды
     }
 
     public static void triggerInventoryGlitchMajor() {
-        System.out.println("[HorrorEffects] Triggering Inventory Glitch (Major)");
         inventoryGlitchActive = true;
         inventoryGlitchEnd = System.currentTimeMillis() + 5000; // 5 секунд
     }
@@ -110,36 +107,26 @@ public class HorrorEffects {
     public static void playAmbientSound(World world, EntityPlayer player) {
         if (world == null || player == null) return;
 
-        System.out.println("[HorrorEffects] Playing Ambient Sound");
-
-        try {
-            world.playSoundEffect(
-                player.posX, player.posY, player.posZ,
-                "ambient.cave.cave",
-                0.8F,
-                0.6F + rand.nextFloat() * 0.2F // Немного понизить высоту
-            );
-            lastAmbientSound = System.currentTimeMillis();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        lastAmbientSound = System.currentTimeMillis();
+        DynamicWindowTitle.triggerTitle(player, "...", 3000L);
     }
 
     public static void playLowHum(World world, EntityPlayer player) {
         if (world == null || player == null) return;
+        DynamicWindowTitle.triggerTitle(player, "I hear you", 3000L);
+    }
 
-        System.out.println("[HorrorEffects] Playing Low Hum");
-
-        try {
-            world.playSoundEffect(
-                player.posX, player.posY, player.posZ,
-                "ambient.cave.cave",
-                0.5F,
-                0.3F // Очень низкая высота = гул
-            );
-            lastLowHum = System.currentTimeMillis();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void triggerHeartbeat(EntityPlayer player) {
+        if (player == null || player.worldObj == null) return;
+        Minecraft mc = Minecraft.theMinecraft;
+        DynamicWindowTitle.triggerTitle(player, "HEARTBEAT", 6000L);
+        player.addChatMessage("\u00a74\u00a7lHEARTBEAT");
+        player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ,
+            "random.click", 1.0F, 0.45F);
+        player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ,
+            "random.click", 1.0F, 0.35F);
+        if (mc != null && mc.sndManager != null) {
+            mc.sndManager.playSoundFX("random.click", 1.0F, 0.45F);
         }
     }
 
@@ -150,19 +137,16 @@ public class HorrorEffects {
     private static long fogEffectEnd = 0;
 
     public static void increaseFogSlightly() {
-        System.out.println("[HorrorEffects] Increasing Fog Slightly (0.7x)");
         currentFogMultiplier = 0.7F;
         fogEffectEnd = System.currentTimeMillis() + 5000;
     }
 
     public static void triggerModerateFog() {
-        System.out.println("[HorrorEffects] Triggering Moderate Fog (0.4x)");
         currentFogMultiplier = 0.4F;
         fogEffectEnd = System.currentTimeMillis() + 8000;
     }
 
     public static void triggerHeavyFog() {
-        System.out.println("[HorrorEffects] Triggering Heavy Fog (0.15x)");
         currentFogMultiplier = 0.15F;
         fogEffectEnd = System.currentTimeMillis() + 10000;
     }
@@ -187,7 +171,6 @@ public class HorrorEffects {
     private static long bloodTimeFrozenAt = 18000; // Полночь
 
     public static void triggerBloodTime() {
-        System.out.println("[HorrorEffects] Triggering Blood Time (15s)");
         bloodTimeActive = true;
         bloodTimeEnd = System.currentTimeMillis() + 15000; // 15 секунд
     }
@@ -199,7 +182,6 @@ public class HorrorEffects {
     private static long invertedCameraEnd = 0;
 
     public static void triggerInvertedCamera() {
-        System.out.println("[HorrorEffects] Triggering Inverted Camera (4s)");
         invertedCameraActive = true;
         invertedCameraEnd = System.currentTimeMillis() + 4000;
     }
@@ -212,7 +194,6 @@ public class HorrorEffects {
     }
 
     public static void resetInvertedCamera() {
-        System.out.println("[HorrorEffects] Resetting Inverted Camera");
         invertedCameraActive = false;
         invertedCameraEnd = 0;
     }
@@ -229,7 +210,6 @@ public class HorrorEffects {
     }
 
     public static void resetBloodTime() {
-        System.out.println("[HorrorEffects] Resetting Blood Time");
         bloodTimeActive = false;
         bloodTimeEnd = 0;
     }
@@ -240,38 +220,14 @@ public class HorrorEffects {
     public static void checkBehindYouGlitch(World world, EntityPlayer player) {
         if (world == null || player == null) return;
 
-        System.out.println("[HorrorEffects] Triggering Behind You Glitch");
 
-        try {
-            // Изменить случайные блоки позади игрока
-            int range = 8;
-            for (int i = 0; i < 5; i++) {
-                int x = (int)player.posX + rand.nextInt(range) - range/2;
-                int y = (int)player.posY + rand.nextInt(range) - range/2;
-                int z = (int)player.posZ + rand.nextInt(range) - range/2;
-
-                int blockId = world.getBlockId(x, y, z);
-
-                // Факелы гаснут или краснеют
-                if (blockId == Block.torchWood.blockID) {
-                    if (rand.nextBoolean()) {
-                        world.setBlockWithNotify(x, y, z, 0); // Убрать факел
-                    }
-                }
-
-                // Листья опадают
-                if (blockId == Block.leaves.blockID) {
-                    world.setBlockWithNotify(x, y, z, 0);
-                }
-
-                // Каменные кирпичи становятся мшистыми
-                if (blockId == Block.stoneBrick.blockID) {
-                    world.setBlockMetadataWithNotify(x, y, z, 1); // Mossy
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // This is a perception effect: never rewrite player-owned terrain.
+        double angle = Math.atan2(player.posZ - player.prevPosZ,
+            player.posX - player.prevPosX);
+        double echoX = player.posX - Math.cos(angle) * 4.0D;
+        double echoZ = player.posZ - Math.sin(angle) * 4.0D;
+        world.playSoundEffect(echoX, player.posY, echoZ, "ambient.cave.cave",
+            0.35F, 0.55F + rand.nextFloat() * 0.2F);
     }
 
     // =============================================================================
@@ -280,12 +236,10 @@ public class HorrorEffects {
     public static void spawnPhantomObserver(World world, EntityPlayer player) {
         if (world == null || player == null) return;
 
-        System.out.println("[HorrorEffects] Spawning Phantom Observer");
 
         try {
             PhantomObserver.spawnNearPlayer(world, player);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -295,12 +249,10 @@ public class HorrorEffects {
     public static void spawnMirrorDouble(World world, EntityPlayer player) {
         if (world == null || player == null) return;
 
-        System.out.println("[HorrorEffects] Spawning Mirror Double");
 
         try {
             MirrorDouble.spawnDouble(world, player);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -310,12 +262,10 @@ public class HorrorEffects {
     public static void triggerPartisanInterference(World world, EntityPlayer player) {
         if (world == null || player == null) return;
 
-        System.out.println("[HorrorEffects] Triggering Partisan Interference");
 
         try {
             PartisanInterference.triggerInterference();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -325,12 +275,10 @@ public class HorrorEffects {
     public static void generateDisappearingAnomaly(World world, EntityPlayer player) {
         if (world == null || player == null) return;
 
-        System.out.println("[HorrorEffects] Generating Disappearing Anomaly");
 
         try {
             DisappearingAnomalies.generateAnomaly();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -340,12 +288,10 @@ public class HorrorEffects {
     public static void triggerGlitchedWindowTitle(EntityPlayer player) {
         if (player == null) return;
 
-        System.out.println("[HorrorEffects] Triggering Glitched Window Title");
 
         try {
             DynamicWindowTitle.triggerGlitchedTitle(player);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -355,12 +301,10 @@ public class HorrorEffects {
     public static void triggerFakeFrameFreeze(EntityPlayer player) {
         if (player == null) return;
 
-        System.out.println("[HorrorEffects] Triggering Fake Frame Freeze");
 
         try {
             FakeFrameFreeze.triggerFreeze(player);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -368,12 +312,10 @@ public class HorrorEffects {
     // 13. VIOLENT SHAKE - Сильная тряска экрана
     // =============================================================================
     public static void triggerViolentShake() {
-        System.out.println("[HorrorEffects] Triggering Violent Shake");
 
         try {
             GlitchManager.triggerViolentShake();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -383,12 +325,10 @@ public class HorrorEffects {
     public static void spawnBedrockTunnel(EntityPlayer player) {
         if (player == null) return;
 
-        System.out.println("[HorrorEffects] Spawning Bedrock Tunnel");
 
         try {
             WorldGenBedrockTunnel.generateNearPlayer(player);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -407,6 +347,20 @@ public class HorrorEffects {
         bloodTimeActive = false;
         bloodTimeEnd = 0;
         delayedFootsteps.clear();
+        resetInvertedCamera();
+        resetBloodTime();
+        resetFog();
+        FootstepEcho.reset();
+        InventoryGlitch.reset();
+        InventoryDeletionLies.reset();
+        FakeFrameFreeze.reset();
+        TemporalVoidDrop.reset();
+        RenderHorrorEffects.reset();
+        SleepDisruption.reset();
+        DisappearingAnomalies.reset();
+        WorldCorruptorGenerator.reset();
+        PhantomObserver.removeAll();
+        MirrorDouble.removeDouble();
     }
 
     /**

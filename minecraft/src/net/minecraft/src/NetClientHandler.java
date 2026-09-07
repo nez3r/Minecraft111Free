@@ -212,6 +212,15 @@ public class NetClientHandler extends NetHandler {
 
 	}
 
+	public void handleHorrorEvent(Packet72HorrorEvent var1) {
+		if(this.worldClient == null || this.mc.thePlayer == null) {
+			return;
+		}
+
+		HorrorEffectsManager.setWorld(this.worldClient, this.mc.thePlayer);
+		HorrorEffectsManager.triggerNetworkEvent(var1);
+	}
+
 	public void handleEntityPainting(Packet25EntityPainting var1) {
 		EntityPainting var2 = new EntityPainting(this.worldClient, var1.xPosition, var1.yPosition, var1.zPosition, var1.direction, var1.title);
 		this.worldClient.addEntityToWorld(var1.entityId, var2);

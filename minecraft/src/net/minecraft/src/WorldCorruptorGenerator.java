@@ -8,7 +8,7 @@ import java.util.Random;
  */
 public class WorldCorruptorGenerator {
     private static final int RADIUS = 20;
-    private static final long CORRUPT_INTERVAL = 5000L; // 5 секунд между изменениями
+    private static final long CORRUPT_INTERVAL = 3 * 60 * 1000L; // independent event every 3 minutes
 
     private static World world;
     private static EntityPlayer player;
@@ -19,15 +19,17 @@ public class WorldCorruptorGenerator {
      * Инициализация
      */
     public static void init(World w, EntityPlayer p) {
-        world = w;
-        player = p;
+        setWorld(w, p);
     }
 
     /**
-     * Тик генератора - вызывать каждый кадр
+     * Проверка независимого постоянного события; вызывать каждый игровой тик.
      */
     public static void tick() {
-        if (world == null || player == null) return;
+        if (world == null || player == null || player.worldObj != world || player.isDead) {
+            reset();
+            return;
+        }
         if (HorrorState.safeMode) return;
 
         long currentTime = System.currentTimeMillis();
@@ -64,16 +66,9 @@ public class WorldCorruptorGenerator {
 
         int size = 3 + rand.nextInt(3); // 3-5 блоков в ширину
 
-        System.out.println("[WorldCorruptor] Generating hole to bedrock at " + x + ", " + z);
 
-        // Вырезать дыру сверху донизу
-        for (int y = (int)player.posY + 10; y > 0; y--) {
-            for (int dx = 0; dx < size; dx++) {
-                for (int dz = 0; dz < size; dz++) {
-                    world.setBlock(x + dx, y, z + dz, 0);
-                }
-            }
-        }
+        // Do not destroy terrain or expose bedrock. The location is logged
+        // for the visual event without corrupting the saved world.
     }
 
     /**
@@ -86,8 +81,8 @@ public class WorldCorruptorGenerator {
 
         int blockId = world.getBlockId(x, y, z);
 
-        if (blockId == Block.waterStill.blockID || blockId == Block.waterMoving.blockID) {
-            System.out.println("[WorldCorruptor] Corrupting water to lava at " + x + ", " + y + ", " + z);
+        if ((blockId == Block.waterStill.blockID || blockId == Block.waterMoving.blockID)
+            && Math.abs(x - player.posX) + Math.abs(z - player.posZ) > 8) {
             world.setBlock(x, y, z, Block.lavaStill.blockID);
         }
     }
@@ -104,12 +99,13 @@ public class WorldCorruptorGenerator {
         double dist = Math.sqrt(Math.pow(x - player.posX, 2) + Math.pow(z - player.posZ, 2));
         if (dist < 8) return;
 
-        System.out.println("[WorldCorruptor] Spawning inverted tree at " + x + ", " + y + ", " + z);
 
         // Ствол (короткий, 3-4 блока)
         int trunkHeight = 3 + rand.nextInt(2);
         for (int i = 0; i < trunkHeight; i++) {
-            world.setBlock(x, y + i, z, Block.wood.blockID);
+            if (world.getBlockId(x, y + i, z) == 0) {
+                world.setBlock(x, y + i, z, Block.wood.blockID);
+            }
         }
 
         // Крона вниз (перевёрнутая)
@@ -119,7 +115,9 @@ public class WorldCorruptorGenerator {
             for (int dx = -radius; dx <= radius; dx++) {
                 for (int dz = -radius; dz <= radius; dz++) {
                     if (dx == 0 && dz == 0 && dy < 2) continue; // Не заменять ствол
-                    world.setBlock(x + dx, leavesStart - dy * 2, z + dz, Block.leaves.blockID);
+                    if (world.getBlockId(x + dx, leavesStart - dy * 2, z + dz) == 0) {
+                        world.setBlock(x + dx, leavesStart - dy * 2, z + dz, Block.leaves.blockID);
+                    }
                 }
             }
         }
@@ -129,6 +127,7 @@ public class WorldCorruptorGenerator {
      * Установить мир и игрока
      */
     public static void setWorld(World w, EntityPlayer p) {
+        if (world != w) lastCorruptTime = System.currentTimeMillis();
         world = w;
         player = p;
     }
@@ -137,6 +136,8 @@ public class WorldCorruptorGenerator {
      * Сбросить генератор
      */
     public static void reset() {
-        lastCorruptTime = 0;
+        lastCorruptTime = System.currentTimeMillis();
+        world = null;
+        player = null;
     }
 }

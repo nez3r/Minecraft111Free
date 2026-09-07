@@ -14,11 +14,13 @@ public class DynamicFogHandler {
     private static EntityPlayer player;
 
     public static void init(World world, EntityPlayer player) {
-        DynamicFogHandler.world = world;
-        DynamicFogHandler.player = player;
+        setWorld(world, player);
     }
 
     public static void setWorld(World w, EntityPlayer p) {
+        if (world != w) {
+            fogCompressed = false;
+        }
         world = w;
         player = p;
     }
@@ -27,8 +29,14 @@ public class DynamicFogHandler {
      * Updates fog density based on player position and nearby hidden entities.
      */
     public static void updateFog() {
-        if (player == null || world == null) return;
-        if (HorrorState.safeMode) return;
+        if (player == null || world == null || player.worldObj != world) {
+            reset();
+            return;
+        }
+        if (HorrorState.safeMode) {
+            reset();
+            return;
+        }
 
         boolean shouldCompress = false;
 
@@ -47,7 +55,7 @@ public class DynamicFogHandler {
                 // Check phantom observer or stalker entities
                 if (entity instanceof Entity404 || entity instanceof PhantomObserver) {
                     double distance = entity.getDistanceToEntity(player);
-                    if (distance < 30.0D) { // Within 30 blocks
+                    if (!entity.isDead && distance < 30.0D) { // Within 30 blocks
                         shouldCompress = true;
                     }
                 }
@@ -102,5 +110,7 @@ public class DynamicFogHandler {
     public static void reset() {
         fogCompressed = false;
         compressedFogDensity = 0.5F;
+        world = null;
+        player = null;
     }
 }

@@ -346,6 +346,7 @@ public class EntityRenderer {
 			var4 = 2.0F / 3.0F;
 			GL11.glScalef(1.0F, var4, 1.0F);
 		}
+		RenderHorrorEffects.applyProjectionShear();
 
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
@@ -373,6 +374,9 @@ public class EntityRenderer {
 		}
 
 		this.orientCamera(var1);
+		if(net.minecraft.src.HorrorEffects.isInvertedCameraActive()) {
+			GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
+		}
 		if(this.debugViewDirection > 0) {
 			int var7 = this.debugViewDirection - 1;
 			if(var7 == 1) {
@@ -570,7 +574,8 @@ public class EntityRenderer {
 				this.lightmapColors[var2] = var19 << 24 | var20 << 16 | var21 << 8 | var22;
 			}
 
-			this.mc.renderEngine.createTextureFromBytes(this.lightmapColors, 16, 16, this.emptyTexture);
+		RenderHorrorEffects.corruptLightmap(this.lightmapColors);
+		this.mc.renderEngine.createTextureFromBytes(this.lightmapColors, 16, 16, this.emptyTexture);
 		}
 	}
 
@@ -636,15 +641,13 @@ public class EntityRenderer {
 				Profiler.startSection("level");
 				if(this.mc.gameSettings.limitFramerate == 0) {
 					// Effect 2: Inverted Camera Inversion
-					if (net.minecraft.src.HorrorEffects.isInvertedCameraActive()) {
-						org.lwjgl.opengl.GL11.glMatrixMode(org.lwjgl.opengl.GL11.GL_PROJECTION);
-						org.lwjgl.opengl.GL11.glPushMatrix();
-						org.lwjgl.opengl.GL11.glScalef(1.0F, -1.0F, 1.0F);
-						org.lwjgl.opengl.GL11.glMatrixMode(org.lwjgl.opengl.GL11.GL_MODELVIEW);
-					}
+					RenderHorrorEffects.beforeWorldRender();
 					this.renderWorld(var1, 0L);
+					RenderHorrorEffects.afterWorldRender();
 				} else {
+					RenderHorrorEffects.beforeWorldRender();
 					this.renderWorld(var1, this.renderEndNanoTime + (long)(1000000000 / var18));
+					RenderHorrorEffects.afterWorldRender();
 				}
 
 				Profiler.endStartSection("sleep");
@@ -659,12 +662,6 @@ public class EntityRenderer {
 					}
 				}
 
-				// Restore inverted camera
-					if (net.minecraft.src.HorrorEffects.isInvertedCameraActive()) {
-						org.lwjgl.opengl.GL11.glMatrixMode(org.lwjgl.opengl.GL11.GL_PROJECTION);
-						org.lwjgl.opengl.GL11.glPopMatrix();
-						org.lwjgl.opengl.GL11.glMatrixMode(org.lwjgl.opengl.GL11.GL_MODELVIEW);
-					}
 				this.renderEndNanoTime = System.nanoTime();
 				Profiler.endStartSection("gui");
 				if(!this.mc.gameSettings.hideGUI || this.mc.currentScreen != null) {
@@ -710,6 +707,9 @@ public class EntityRenderer {
 
 	public void renderWorld(float var1, long var2) {
 		Profiler.startSection("lightTex");
+		if(RenderHorrorEffects.active(47)) {
+			this.lightmapUpdateNeeded = true;
+		}
 		if(this.lightmapUpdateNeeded) {
 			this.updateLightmap();
 		}
@@ -773,7 +773,10 @@ public class EntityRenderer {
 			Profiler.endStartSection("culling");
 			Frustrum var19 = new Frustrum();
 			var19.setPosition(var7, var9, var11);
-			this.mc.renderGlobal.clipRenderersByFrustrum(var19, var1);
+			if((!RenderHorrorEffects.active(48) && !RenderHorrorEffects.active(57))
+				|| (RenderHorrorEffects.getFrame() & 1) == 0) {
+				this.mc.renderGlobal.clipRenderersByFrustrum(var19, var1);
+			}
 			if(var18 == 0) {
 				Profiler.endStartSection("updatechunks");
 
@@ -1221,6 +1224,7 @@ public class EntityRenderer {
 		}
 
 		GL11.glClearColor(this.fogColorRed, this.fogColorGreen, this.fogColorBlue, 0.0F);
+		RenderHorrorEffects.overrideClearColor();
 	}
 
 	private void setupFog(int var1, float var2) {

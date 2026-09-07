@@ -60,53 +60,14 @@ public class HallucinatorySoundPan {
             currentPan = Math.max(0.0F, Math.min(1.0F, currentPan));
         }
 
-        // Воспроизвести звук с текущим паном
-        if (currentTime - lastSoundTime >= SOUND_INTERVAL) {
-            playDisorientedSound();
-            lastSoundTime = currentTime;
-        }
+        // Pan state is consumed by the sound renderer; do not inject sounds here.
     }
 
     /**
      * Воспроизвести искажённый звук
      */
     private static void playDisorientedSound() {
-        if (player == null || player.worldObj == null) return;
-
-        // Выбрать случайный звук
-        String[] sounds = {"ambient.cave.cave", "step.stone", "step.wood", "random.sizzle"};
-        String sound = sounds[rand.nextInt(sounds.length)];
-
-        // Ультранизкая частота для дискомфорта (20-30 Гц)
-        float basePitch = 0.1F + rand.nextFloat() * 0.05F;
-
-        // Воспроизвести звук с паном
-        player.worldObj.playSoundEffect(
-            player.posX, player.posY, player.posZ,
-            sound,
-            0.3F, // Громкость (тихо, чтобы не раздражать слишком сильно)
-            basePitch
-        );
-
-        // Второй звук в другом ухе (через небольшую задержку)
-        if (rand.nextFloat() < 0.3F) {
-            final float otherPan = 1.0F - currentPan;
-            new Thread(() -> {
-                try {
-                    Thread.sleep(100);
-                    if (player != null && player.worldObj != null) {
-                        player.worldObj.playSoundEffect(
-                            player.posX, player.posY, player.posZ,
-                            sound,
-                            0.2F,
-                            basePitch * 0.9F
-                        );
-                    }
-                } catch (Exception e) {}
-            }).start();
-        }
-
-        System.out.println("[HallucinatorySoundPan] Playing sound with pan: " + currentPan);
+        lastSoundTime = System.currentTimeMillis();
     }
 
     /**

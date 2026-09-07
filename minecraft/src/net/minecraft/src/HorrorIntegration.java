@@ -13,6 +13,13 @@ public class HorrorIntegration {
     public static void init(World world, EntityPlayer player) {
         HorrorIntegration.world = world;
         HorrorIntegration.player = player;
+        DynamicFogHandler.init(world, player);
+        BloodTimeCycle.init(world, player);
+        FootstepEcho.init(world, player);
+        InventoryGlitch.setPlayer(player);
+        InventoryDeletionLies.setPlayer(player);
+        WorldCorruptorGenerator.init(world, player);
+        SleepDisruption.setWorld(world, player);
         initialized = true;
     }
 
@@ -23,40 +30,21 @@ public class HorrorIntegration {
         if (!initialized || world == null || player == null) return;
         if (HorrorState.safeMode) return;
 
+        HorrorEffectsManager.processNetworkEvents();
         // Call all horror system tick methods
-        try {
-            DynamicFogHandler.updateFog();
-        } catch (Exception e) {}
-        try {
-            BloodTimeCycle.updateTimeCycle();
-        } catch (Exception e) {}
-        try {
-            FootstepEcho.tick();
-        } catch (Exception e) {}
-        try {
-            PartisanInterference.tick();
-        } catch (Exception e) {}
-        try {
-            InventoryGlitch.tick();
-        } catch (Exception e) {}
-        try {
-            FalseBackgroundSounds.tick();
-        } catch (Exception e) {}
-        try {
-            DisappearingAnomalies.tick();
-        } catch (Exception e) {}
-        try {
-            InventoryDeletionLies.tick();
-        } catch (Exception e) {}
-        try {
-            WorldCorruptorGenerator.tick();
-        } catch (Exception e) {}
-        try {
-            HallucinatorySoundPan.tick();
-        } catch (Exception e) {}
-        try {
-            BedtimeTrappedDimension.tick();
-        } catch (Exception e) {}
+        DynamicFogHandler.updateFog();
+        BloodTimeCycle.updateTimeCycle();
+        FootstepEcho.tick();
+        TemporalVoidDrop.onTick();
+        RenderHorrorEffects.tick();
+        PartisanInterference.tick();
+        InventoryGlitch.tick();
+        FalseBackgroundSounds.tick();
+        DisappearingAnomalies.tick();
+        InventoryDeletionLies.tick();
+        WorldCorruptorGenerator.tick();
+        HallucinatorySoundPan.tick();
+        BedtimeTrappedDimension.tick();
     }
 
     /**
@@ -66,10 +54,9 @@ public class HorrorIntegration {
         if (player == null) return;
         HorrorIntegration.player = player;
 
-        try {
-            FootstepEcho.tick();
-            DynamicWindowTitle.updateTitle(player);
-        } catch (Exception e) {}
+        FootstepEcho.tick();
+        FakeFrameFreeze.applyDisplacement(player);
+        DynamicWindowTitle.updateTitle(player);
     }
 
     /**
@@ -77,24 +64,18 @@ public class HorrorIntegration {
      */
     public static void onBlockBroken(int blockId, EntityPlayer player) {
         if (player == null) return;
-        try {
-            FakeFrameFreeze.triggerOnBlockBreak(blockId, player);
-        } catch (Exception e) {}
+        FakeFrameFreeze.triggerOnBlockBreak(blockId, player);
     }
 
     /**
      * Call when inventory opens/closes.
      */
     public static void onInventoryOpen() {
-        try {
-            FalseBackgroundSounds.onInventoryOpen();
-        } catch (Exception e) {}
+        FalseBackgroundSounds.onInventoryOpen();
     }
 
     public static void onInventoryClose() {
-        try {
-            FalseBackgroundSounds.onInventoryClose();
-        } catch (Exception e) {}
+        FalseBackgroundSounds.onInventoryClose();
     }
 
     /**
@@ -102,11 +83,7 @@ public class HorrorIntegration {
      */
     public static boolean onSleepAttempt(EntityPlayer player) {
         if (player == null) return false;
-        try {
-            return SleepDisruption.onPlayerSleep(player);
-        } catch (Exception e) {
-            return false;
-        }
+        return SleepDisruption.onPlayerSleep(player);
     }
 
     public static boolean isSafe() {

@@ -221,6 +221,7 @@ public abstract class Packet {
 		addIdClassMapping(61, true, false, Packet61DoorChange.class);
 		addIdClassMapping(70, true, false, Packet70Bed.class);
 		addIdClassMapping(71, true, false, Packet71Weather.class);
+		addIdClassMapping(72, true, false, Packet72HorrorEvent.class);
 		addIdClassMapping(100, true, false, Packet100OpenWindow.class);
 		addIdClassMapping(101, true, true, Packet101CloseWindow.class);
 		addIdClassMapping(102, false, true, Packet102WindowClick.class);

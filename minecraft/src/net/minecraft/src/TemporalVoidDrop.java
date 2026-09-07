@@ -1,13 +1,13 @@
 package net.minecraft.src;
 
 /**
- * TemporalVoidDrop - Мгновенный выброс в пустоту (2.5 сек)
+ * TemporalVoidDrop - безопасное падение игрока (4 сек)
  */
 public class TemporalVoidDrop {
     private static boolean isActive = false;
     private static double origX, origY, origZ;
     private static float origYaw, origPitch;
-    private static int ticksRemaining = 0;
+    private static long dropEnd = 0L;
 
     private static EntityPlayer player;
 
@@ -16,6 +16,10 @@ public class TemporalVoidDrop {
     public static void trigger() {
         if (isActive) return;
         if (player == null) return;
+        if (player.worldObj != null && player.worldObj.multiplayerWorld) {
+            DynamicWindowTitle.triggerTitle(player, "FALLING...", 2500L);
+            return;
+        }
 
         origX = player.posX;
         origY = player.posY;
@@ -23,20 +27,27 @@ public class TemporalVoidDrop {
         origYaw = player.rotationYaw;
         origPitch = player.rotationPitch;
 
-        player.setPosition(origX, 500.0D, origZ);
-        // Camera looks down (pitch = 90)
-        player.rotationPitch = 90.0F;
+        player.setPosition(origX, 90.0D, origZ);
+        player.motionY = -0.35D;
+        player.fallDistance = 0.0F;
         isActive = true;
-        ticksRemaining = 50; // 2.5 сек (20 тиков = 1 сек)
+        dropEnd = System.currentTimeMillis() + 4000L;
     }
 
     public static void onTick() {
         if (!isActive) return;
-        ticksRemaining--;
-        if (ticksRemaining <= 0) {
-            player.setPositionAndRotation(origX, origY, origZ, origYaw, origPitch);
-            player.worldObj.playSoundAtEntity(player, "damage.fallbig", 1.0F, 0.5F);
+        player.fallDistance = 0.0F;
+        if (System.currentTimeMillis() >= dropEnd) {
+            player.fallDistance = 0.0F;
             isActive = false;
+        }
+    }
+
+    public static void reset() {
+        isActive = false;
+        dropEnd = 0L;
+        if (player != null) {
+            player.fallDistance = 0.0F;
         }
     }
 }

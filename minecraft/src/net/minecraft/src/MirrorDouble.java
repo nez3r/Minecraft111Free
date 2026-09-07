@@ -5,6 +5,8 @@ package net.minecraft.src;
  * with a 2-3 second delay, positioned on the opposite side of dark corridors.
  */
 public class MirrorDouble extends EntityLiving {
+    private static World activeWorld;
+    private static EntityPlayer activePlayer;
     private EntityPlayer targetPlayer;
     private long spawnTime;
     private float[] movementHistory = new float[200]; // Store positions for ~3 seconds at 20 ticks/sec
@@ -20,6 +22,7 @@ public class MirrorDouble extends EntityLiving {
     private double mirrorX;
     private double mirrorY;
     private double mirrorZ;
+    private boolean anchorSet;
 
     public MirrorDouble(World world, EntityPlayer player) {
         super(world);
@@ -49,14 +52,14 @@ public class MirrorDouble extends EntityLiving {
         }
 
         // Position mirror double on opposite side of corridor from player
-        positionMirror();
+        if (!anchorSet) positionMirror();
 
         // Record player movements for delayed playback
         recordMovement();
 
         // Play back recorded movement after delay
         tickCounter++;
-        if (tickCounter >= delayTicks) {
+        if (tickCounter > delayTicks) {
             playbackMovement();
         }
 
@@ -76,7 +79,7 @@ public class MirrorDouble extends EntityLiving {
         double perpX = Math.sin(yawRad);
         double perpZ = Math.cos(yawRad);
 
-        // Place mirror at a distance (15-25 blocks) on the perpendicular axis
+        // Place mirror at a stable distance (15-25 blocks) on the perpendicular axis
         double distance = 15.0D + Math.random() * 10.0D;
 
         mirrorX = targetPlayer.posX + perpX * distance;
@@ -87,6 +90,7 @@ public class MirrorDouble extends EntityLiving {
         mirrorY = worldObj.getHeightValue((int)mirrorX, (int)mirrorZ) + 1;
 
         this.setPosition(mirrorX, mirrorY, mirrorZ);
+        anchorSet = true;
     }
 
     private void recordMovement() {
@@ -107,8 +111,11 @@ public class MirrorDouble extends EntityLiving {
         if (!isRecording) return;
 
         // Calculate the index to play back (delayed by delayTicks)
-        int playbackIndex = historyIndex - (delayTicks * 3);
-        if (playbackIndex < 0) playbackIndex += movementHistory.length / 3;
+        if (tickCounter <= delayTicks) return;
+        int playbackIndex = historyIndex - delayTicks - 1;
+        int historySize = movementHistory.length / 3;
+        while (playbackIndex < 0) playbackIndex += historySize;
+        while (playbackIndex >= historySize) playbackIndex -= historySize;
         if (playbackIndex < 0 || playbackIndex >= movementHistory.length / 3) return;
 
         float px = movementHistory[playbackIndex * 3];
@@ -123,11 +130,13 @@ public class MirrorDouble extends EntityLiving {
         );
 
         if (currentDistance > 2.0D) {
-            // Move mirror toward recorded position gradually
-            double speed = 0.5D;
-            mirrorX += (px - mirrorX) * speed;
-            mirrorY += (py - mirrorY) * speed;
-            mirrorZ += (pz - mirrorZ) * speed;
+            // Apply the delayed movement as an offset from the fixed anchor.
+            double dx = px - (float)targetPlayer.posX;
+            double dy = py - (float)targetPlayer.posY;
+            double dz = pz - (float)targetPlayer.posZ;
+            mirrorX += dx * 0.1D;
+            mirrorY += dy * 0.1D;
+            mirrorZ += dz * 0.1D;
 
             this.setPosition(mirrorX, mirrorY, mirrorZ);
         }
@@ -190,13 +199,18 @@ public class MirrorDouble extends EntityLiving {
     }
 
     public static void setWorld(World w, EntityPlayer p) {
-        // Static utility methods for manager
+        if (activeWorld != w || activePlayer != p) {
+            removeDouble();
+        }
+        activeWorld = w;
+        activePlayer = p;
     }
 
     public static void spawnDouble(World w, EntityPlayer p) {
         // Spawn mirror double near player
         if (w != null && p != null) {
             try {
+                setWorld(w, p);
                 MirrorDouble mirror = new MirrorDouble(w, p);
                 w.spawnEntityInWorld(mirror);
             } catch (Exception e) {}
@@ -204,10 +218,20 @@ public class MirrorDouble extends EntityLiving {
     }
 
     public static void update() {
-        // Update mirror doubles
+        // Entities are updated by World.tick; no second update loop is needed.
     }
 
     public static void removeDouble() {
-        // Remove all mirror doubles
+        if (activeWorld != null) {
+            java.util.ArrayList entities = new java.util.ArrayList(activeWorld.loadedEntityList);
+            for (int i = 0; i < entities.size(); i++) {
+                Object entity = entities.get(i);
+                if (entity instanceof MirrorDouble) {
+                    ((Entity)entity).setEntityDead();
+                }
+            }
+        }
+        activeWorld = null;
+        activePlayer = null;
     }
 }

@@ -75,30 +75,23 @@ public class UnknownEffects {
             // Попытка 1: Абсолютный путь к libraries/natives/Unknown.dll
             File dllFile = new File("libraries/natives/Unknown.dll").getAbsoluteFile();
             if (dllFile.exists()) {
-                System.out.println("[Unknown.dll] Loading from: " + dllFile.getAbsolutePath());
                 return (UnknownDLL) Native.loadLibrary(dllFile.getAbsolutePath(), UnknownDLL.class);
             }
 
             // Попытка 2: Относительный путь с обратными слешами
             dllFile = new File("libraries\\natives\\Unknown.dll").getAbsoluteFile();
             if (dllFile.exists()) {
-                System.out.println("[Unknown.dll] Loading from: " + dllFile.getAbsolutePath());
                 return (UnknownDLL) Native.loadLibrary(dllFile.getAbsolutePath(), UnknownDLL.class);
             }
 
             // Попытка 3: Текущая директория
             dllFile = new File("Unknown.dll").getAbsoluteFile();
             if (dllFile.exists()) {
-                System.out.println("[Unknown.dll] Loading from: " + dllFile.getAbsolutePath());
                 return (UnknownDLL) Native.loadLibrary(dllFile.getAbsolutePath(), UnknownDLL.class);
             }
 
-            System.err.println("[Unknown.dll] Not found in any expected location");
-            System.err.println("[Unknown.dll] Tried: " + new File("libraries/natives/Unknown.dll").getAbsolutePath());
             return null;
         } catch (Exception e) {
-            System.err.println("[Unknown.dll] Failed to load: " + e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
@@ -115,16 +108,13 @@ public class UnknownEffects {
                 UnknownDLL.INSTANCE.SetEffectsEnabled(true);
                 dllAvailable = true;
                 dllLoaded = true;
-                System.out.println("[Unknown.dll] Loaded successfully");
             } else {
                 dllAvailable = false;
                 dllLoaded = true;
-                System.err.println("[Unknown.dll] Failed to load: INSTANCE is null");
             }
         } catch (Exception e) {
             dllAvailable = false;
             dllLoaded = true;
-            System.err.println("[Unknown.dll] Failed to initialize: " + e.getMessage());
         }
     }
 
@@ -154,7 +144,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -172,7 +161,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -192,7 +180,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -211,7 +198,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -229,7 +215,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -242,7 +227,6 @@ public class UnknownEffects {
         try {
             UnknownDLL.INSTANCE.ClipboardWhisper(text);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -259,7 +243,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -277,7 +260,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -289,7 +271,6 @@ public class UnknownEffects {
         try {
             UnknownDLL.INSTANCE.SetEffectsEnabled(enabled);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -301,7 +282,6 @@ public class UnknownEffects {
         try {
             UnknownDLL.INSTANCE.RestoreGamma();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -317,7 +297,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -335,7 +314,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -352,7 +330,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -366,7 +343,6 @@ public class UnknownEffects {
             String title = "Minecraft 1.1.1 Free";
             UnknownDLL.INSTANCE.WindowGhostIcon(title, iconType);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -379,18 +355,19 @@ public class UnknownEffects {
             new Thread(new Runnable() {
                 public void run() {
                     try {
-                        // Получить хэндл окна через User32
-                        com.sun.jna.platform.win32.WinDef.HWND hwnd = com.sun.jna.platform.win32.User32.INSTANCE.GetActiveWindow();
+                        com.sun.jna.platform.win32.WinDef.HWND hwnd =
+                            com.sun.jna.platform.win32.User32.INSTANCE.FindWindow(null, "Minecraft 1.1.1 Free");
+                        if (hwnd == null) {
+                            hwnd = com.sun.jna.platform.win32.User32.INSTANCE.GetForegroundWindow();
+                        }
                         if (hwnd != null) {
                             UnknownDLL.INSTANCE.WindowTransparencyGhosting(hwnd.getPointer(), durationMs);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -406,7 +383,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -422,7 +398,6 @@ public class UnknownEffects {
                 }
             }).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

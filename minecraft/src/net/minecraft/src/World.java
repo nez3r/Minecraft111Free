@@ -200,6 +200,7 @@ public class World implements IBlockAccess {
 		this.mapStorage = new MapStorage(var1);
 		this.worldInfo = var1.loadWorldInfo();
 		this.isNewWorld = this.worldInfo == null;
+		HorrorStatePersistence.load(this);
 		if(var4 != null) {
 			this.worldProvider = var4;
 		} else if(this.worldInfo != null && this.worldInfo.getDimension() != 0) {
@@ -342,6 +343,7 @@ public class World implements IBlockAccess {
 
 	private void saveLevel() {
 		this.checkSessionLock();
+		HorrorStatePersistence.save(this);
 		this.saveHandler.saveWorldInfoAndPlayer(this.worldInfo, this.playerEntities);
 		this.mapStorage.saveAllData();
 	}

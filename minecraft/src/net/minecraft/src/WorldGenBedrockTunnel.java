@@ -52,7 +52,7 @@ public class WorldGenBedrockTunnel extends WorldGenerator {
 
         // Place one torch at entrance
         world.setBlockWithNotify(x + 2, centerY, z - 1, Block.torchWood.blockID);
-        world.setBlockMetadataWithNotify(x + 2, centerY, z - 1, 4); // South facing
+        world.setBlockMetadataWithNotify(x + 2, centerY, z - 1, 3); // Attached to north wall
 
         // Place chest with diamonds at the end (5 blocks away initially)
         int chestX = x + 4;
@@ -152,7 +152,7 @@ public class WorldGenBedrockTunnel extends WorldGenerator {
 
         // Place one torch at entrance on wall (not floating)
         player.worldObj.setBlock(tunnelX + 2, centerY, tunnelZ + 1, Block.torchWood.blockID);
-        player.worldObj.setBlockMetadataWithNotify(tunnelX + 2, centerY, tunnelZ + 1, 3); // North facing (attached to south wall)
+        player.worldObj.setBlockMetadataWithNotify(tunnelX + 2, centerY, tunnelZ + 1, 4); // Attached to south wall
 
         // Reset segment counter
         lastGeneratedSegment = 4; // Already generated 0-4
@@ -242,13 +242,7 @@ public class WorldGenBedrockTunnel extends WorldGenerator {
 
         // Only generate 1 segment per call to avoid lag
         for(int dx = Math.max(0, lastGeneratedSegment + 1); dx < targetLength; dx++) {
-            // Check if this segment already exists
-            if(world.getBlockId(startX + dx, centerY, centerZ) != 0) {
-                lastGeneratedSegment = dx;
-                continue;
-            }
-
-            // Generate only this one segment
+            // Always rebuild the segment so terrain and structures cannot stop the tunnel.
             for(int dy = -2; dy <= 2; dy++) {
                 for(int dz = -2; dz <= 2; dz++) {
                     int blockX = startX + dx;
@@ -268,7 +262,7 @@ public class WorldGenBedrockTunnel extends WorldGenerator {
             // Place torch on wall every 5 blocks (on south wall, not floating)
             if(dx % 5 == 0 && dx > 0) {
                 world.setBlock(startX + dx, centerY, centerZ + 1, Block.torchWood.blockID);
-                world.setBlockMetadataWithNotify(startX + dx, centerY, centerZ + 1, 3); // North facing (attached to south wall)
+                world.setBlockMetadataWithNotify(startX + dx, centerY, centerZ + 1, 4); // Attached to south wall
             }
 
             // Place chest at position 80 with back wall

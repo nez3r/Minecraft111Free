@@ -3,7 +3,7 @@
 # Компилятор и флаги
 CXX = g++
 CXXFLAGS = -shared -O2 -Wall -std=c++11
-LDFLAGS = -lgdi32 -luser32 -lkernel32
+LDFLAGS = -lgdi32 -luser32 -lkernel32 -lwinmm
 
 # Имя выходной DLL
 TARGET = Unknown.dll

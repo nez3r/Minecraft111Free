@@ -9,9 +9,19 @@ public class DynamicWindowTitle {
     private static String originalTitle = "Minecraft 1.1.1 Free";
     private static boolean titleUpdated = false;
     private static EntityPlayer player;
+    private static String forcedTitle;
+    private static long forcedTitleEnd;
 
     public static void updateTitle(EntityPlayer player) {
         if (player == null) return;
+
+        if (forcedTitle != null) {
+            if (System.currentTimeMillis() < forcedTitleEnd) {
+                Display.setTitle(forcedTitle);
+                return;
+            }
+            forcedTitle = null;
+        }
 
         // Update title based on health or events
         float healthPercent = (float)player.health / (float)player.getMaxHealth();
@@ -59,7 +69,14 @@ public class DynamicWindowTitle {
 
     public static void triggerGlitchedTitle(EntityPlayer p) {
         if (p != null) {
-            updateTitle(p);
+            triggerTitle(p, "???", 5000L);
         }
+    }
+
+    public static void triggerTitle(EntityPlayer p, String title, long duration) {
+        if (p == null || title == null) return;
+        forcedTitle = title;
+        forcedTitleEnd = System.currentTimeMillis() + duration;
+        Display.setTitle(title);
     }
 }

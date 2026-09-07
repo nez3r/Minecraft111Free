@@ -10,13 +10,14 @@ public class FakeFrameFreeze {
     private static final long FREEZE_DURATION = 1500L; // 1.5 seconds
     private static double targetX, targetY, targetZ;
     private static int freezeCounter = 0;
+    private static EntityPlayer pendingPlayer;
+    private static boolean displacementPending = false;
 
     public static boolean isFreezeActive() {
         if (!freezeActive) return false;
 
         long elapsed = System.currentTimeMillis() - freezeStartTime;
         if (elapsed >= FREEZE_DURATION) {
-            freezeActive = false;
             return false;
         }
         return true;
@@ -29,7 +30,8 @@ public class FakeFrameFreeze {
      */
     public static void triggerOnBlockBreak(int blockId, EntityPlayer player) {
         if (HorrorState.safeMode) return;
-        if (freezeActive) return;
+        if (player != null && player.worldObj != null && player.worldObj.multiplayerWorld) return;
+        if (freezeActive || displacementPending) return;
 
         // Only trigger on specific blocks (ores, special blocks)
         if (blockId == Block.oreDiamond.blockID ||
@@ -49,9 +51,12 @@ public class FakeFrameFreeze {
     }
 
     private static void activateFreeze(EntityPlayer player) {
+        if (player == null || player.worldObj == null || HorrorState.safeMode) return;
         freezeActive = true;
         freezeStartTime = System.currentTimeMillis();
         freezeCounter++;
+        pendingPlayer = player;
+        displacementPending = true;
 
         // Play scary sound
         if (player.worldObj != null) {
@@ -97,27 +102,44 @@ public class FakeFrameFreeze {
      * Apply displacement to player after freeze ends.
      */
     public static void applyDisplacement(EntityPlayer player) {
-        if (!freezeActive) return;
+        if (!displacementPending || player == null || player != pendingPlayer) return;
+        if (player.worldObj != null && player.worldObj.multiplayerWorld) {
+            reset();
+            return;
+        }
 
         long elapsed = System.currentTimeMillis() - freezeStartTime;
         if (elapsed < FREEZE_DURATION) return;
 
         // Apply displacement once
-        if (targetX != 0 || targetZ != 0) {
+        if (player.worldObj != null && !player.isDead) {
             player.setPosition(targetX, targetY, targetZ);
-            targetX = 0;
-            targetY = 0;
-            targetZ = 0;
         }
+        freezeActive = false;
+        displacementPending = false;
+        pendingPlayer = null;
+        targetX = 0;
+        targetY = 0;
+        targetZ = 0;
     }
 
     public static void setPlayer(EntityPlayer p) {
-        // Not needed for this effect
+        if (pendingPlayer != p) reset();
     }
 
     public static void triggerFreeze(EntityPlayer p) {
         if (p != null) {
             activateFreeze(p);
         }
+    }
+
+    public static void reset() {
+        freezeActive = false;
+        freezeStartTime = 0;
+        targetX = 0;
+        targetY = 0;
+        targetZ = 0;
+        pendingPlayer = null;
+        displacementPending = false;
     }
 }

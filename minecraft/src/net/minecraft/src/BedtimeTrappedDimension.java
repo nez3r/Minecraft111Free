@@ -25,7 +25,6 @@ public class BedtimeTrappedDimension {
             world = w;
             trapTime = 0;
 
-            System.out.println("[BedtimeTrappedDimension] Player trapped in sleep dimension");
             return true; // Вернуть true, чтобы перехватить сон
         }
 
@@ -98,7 +97,6 @@ public class BedtimeTrappedDimension {
         // Поставить игрока в центр
         player.setPosition(centerX, centerY, centerZ);
 
-        System.out.println("[BedtimeTrappedDimension] Player teleported to bedrock dimension");
     }
 
     /**
@@ -113,7 +111,6 @@ public class BedtimeTrappedDimension {
         trapped = false;
         trapTime = 0;
 
-        System.out.println("[BedtimeTrappedDimension] Player released from trap");
     }
 
     /**

@@ -1,11 +1,10 @@
 package net.minecraft.src;
 
 /**
- * Blood time cycle - fixes time at midnight (18000) and periodically
- * tints sky and fog dark red on damage or cave exploration.
+ * Blood time cycle - periodically tints sky and fog dark red on damage
+ * or cave exploration without stopping the normal world clock.
  */
 public class BloodTimeCycle {
-    private static final long MIDNIGHT_TICK = 18000L;
     private static final float NORMAL_SKY_RED = 0.0F;
     private static final float BLOOD_SKY_RED = 0.6F;
     private static final float NORMAL_SKY_GREEN = 0.0F;
@@ -18,7 +17,7 @@ public class BloodTimeCycle {
 
     // Timers
     private static long lastBloodTintTime = 0;
-    private static long bloodTintDuration = 3000L; // 3 seconds
+    private static long bloodTintDuration = 15000L;
     private static boolean bloodModeActive = false;
     private static float currentSkyRed = NORMAL_SKY_RED;
     private static float currentSkyGreen = NORMAL_SKY_GREEN;
@@ -36,13 +35,10 @@ public class BloodTimeCycle {
     }
 
     /**
-     * Updates time cycle - fixes at midnight and applies blood tint when needed.
+     * Updates visual tint state while leaving the normal day/night cycle intact.
      */
     public static void updateTimeCycle() {
         if (world == null || player == null) return;
-
-        // Always fix time at midnight (tick 18000)
-        world.worldInfo.setWorldTime(MIDNIGHT_TICK);
 
         // Check for blood tint triggers
         boolean triggerBlood = false;

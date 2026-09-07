@@ -69,11 +69,11 @@ public class ChunkProviderTunnel implements IChunkProvider {
                 if(localZ >= 0 && localZ < 16) {
                     // Torch on north wall
                     chunk.setBlockID(x, centerY, centerZ - 1 + 8, Block.torchWood.blockID);
-                    chunk.setBlockMetadata(x, centerY, centerZ - 1 + 8, 4); // South facing
+                    chunk.setBlockMetadata(x, centerY, centerZ - 1 + 8, 3); // Attached to north wall
 
                     // Torch on south wall
                     chunk.setBlockID(x, centerY, centerZ + 1 + 8, Block.torchWood.blockID);
-                    chunk.setBlockMetadata(x, centerY, centerZ + 1 + 8, 3); // North facing
+                    chunk.setBlockMetadata(x, centerY, centerZ + 1 + 8, 4); // Attached to south wall
                 }
             }
         }

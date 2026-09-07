@@ -11,13 +11,13 @@ bobView:true
 anaglyph3d:false
 advancedOpengl:true
 fpsLimit:2
-difficulty:2
+difficulty:0
 fancyGraphics:false
 ao:true
 clouds:true
 skin:Default
 lastServer:
-lang:ru_RU
+lang:en_US
 key_key.attack:-100
 key_key.use:-99
 key_key.forward:17

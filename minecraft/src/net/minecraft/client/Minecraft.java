@@ -1098,17 +1098,16 @@ public abstract class Minecraft implements Runnable {
 		}
 
 		// Horror mod: Update glitch effects
-		if(this.theWorld != null && !this.theWorld.multiplayerWorld) {
-			GlitchManager.update();
-			ScreamerManager.update();
-
-			// Update new horror effects system
-			if(this.thePlayer != null) {
+		if(this.theWorld != null) {
+			if(!this.theWorld.multiplayerWorld) {
+				GlitchManager.update();
+				ScreamerManager.update();
 				HorrorEffectsManager.setWorld(this.theWorld, this.thePlayer);
 				HorrorEffectsManager.update();
-					// Initialize and tick horror integration (footstep echo, blood time, etc.)
-					HorrorIntegration.init(this.theWorld, this.thePlayer);
-					HorrorIntegration.tick();
+			}
+			if(this.thePlayer != null) {
+				HorrorIntegration.init(this.theWorld, this.thePlayer);
+				HorrorIntegration.tick();
 			}
 		}
 

@@ -16,35 +16,42 @@ public class DisappearingAnomalies {
     private static World world;
     private static EntityPlayer player;
     private static long lastTickTime = 0;
-    private static Map<String, AnomalyData> activeAnomalies = new HashMap<>();
+    private static Map<String, AnomalyData> activeAnomalies = new HashMap<String, AnomalyData>();
 
     private static class AnomalyData {
         int x, y, z;
         int blockType;
+        int originalBlockType;
         long spawnTime;
         boolean isTracked;
 
-        AnomalyData(int x, int y, int z, int blockType) {
+        AnomalyData(int x, int y, int z, int blockType, int originalBlockType) {
             this.x = x;
             this.y = y;
             this.z = z;
             this.blockType = blockType;
+            this.originalBlockType = originalBlockType;
             this.spawnTime = System.currentTimeMillis();
             this.isTracked = true;
         }
     }
 
     public static void init(World world, EntityPlayer player) {
-        DisappearingAnomalies.world = world;
-        DisappearingAnomalies.player = player;
+        setWorld(world, player);
     }
 
     /**
      * Call this from world tick to generate and manage anomalies.
      */
     public static void tick() {
-        if (world == null || player == null) return;
-        if (HorrorState.safeMode) return;
+        if (world == null || player == null || player.worldObj != world) {
+            reset();
+            return;
+        }
+        if (HorrorState.safeMode) {
+            despawnAll();
+            return;
+        }
 
         // Apply speed multiplier
         long effectiveInterval = (long)(TICK_INTERVAL / HorrorState.horrorSpeedMultiplier);
@@ -72,9 +79,7 @@ public class DisappearingAnomalies {
                 int targetChunkX = playerChunkX + cx;
                 int targetChunkZ = playerChunkZ + cz;
 
-                // Check if this chunk already has an anomaly
-                String chunkKey = targetChunkX + "," + targetChunkZ;
-                if (activeAnomalies.containsKey(chunkKey)) continue;
+                        if (hasAnomalyInChunk(targetChunkX, targetChunkZ)) continue;
 
                 // Random chance to place anomaly
                 if (Math.random() * 100 < SPAWN_CHANCE) {
@@ -85,7 +90,7 @@ public class DisappearingAnomalies {
     }
 
     private static void spawnAnomalyInChunk(int chunkX, int chunkZ) {
-        Random rand = new Random(chunkX * 31337 + chunkZ * 7919);
+        Random rand = new Random(chunkX * 31337L + chunkZ * 7919L);
 
         // Random position within chunk
         int x = chunkX * 16 + rand.nextInt(16);
@@ -94,8 +99,10 @@ public class DisappearingAnomalies {
 
         // Only spawn underground or in appropriate places
         if (y > 60) return; // Too high
+        if (world.getBlockId(x, y, z) != 0) return;
 
         int blockType = Block.cobblestone.blockID; // Default
+        int originalBlockType = world.getBlockId(x, y, z);
 
         // Choose anomaly type
         int anomalyType = rand.nextInt(3);
@@ -117,19 +124,21 @@ public class DisappearingAnomalies {
 
         // Track this anomaly
         String key = x + "," + y + "," + z;
-        activeAnomalies.put(key, new AnomalyData(x, y, z, blockType));
+        activeAnomalies.put(key, new AnomalyData(x, y, z, blockType, originalBlockType));
     }
 
     private static void spawnPillar(int x, int baseY, int z, int height, int blockType) {
         for (int y = 0; y < height; y++) {
-            world.setBlock(x, baseY + y, z, blockType);
+            if (world.getBlockId(x, baseY + y, z) == 0) {
+                world.setBlock(x, baseY + y, z, blockType);
+            }
         }
     }
 
     private static void checkDespawn() {
         if (player == null) return;
 
-        String toRemove = null;
+        java.util.ArrayList<String> toRemove = new java.util.ArrayList<String>();
 
         for (Map.Entry<String, AnomalyData> entry : activeAnomalies.entrySet()) {
             AnomalyData anomaly = entry.getValue();
@@ -142,23 +151,22 @@ public class DisappearingAnomalies {
 
             // Despawn if player is far enough away
             if (distance > DESPAWN_DISTANCE) {
-                // Silently remove the anomaly
-                if (anomaly.blockType == Block.chest.blockID) {
-                    // For chests, also remove the tile entity
-                    TileEntity tileentity = world.getBlockTileEntity(anomaly.x, anomaly.y, anomaly.z);
-                    if (tileentity != null) {
-                        tileentity.invalidate();
+                // Restore only blocks still owned by the anomaly; never erase
+                // a player's replacement block or an unrelated tile entity.
+                if (world.getBlockId(anomaly.x, anomaly.y, anomaly.z) == anomaly.blockType) {
+                    world.setBlock(anomaly.x, anomaly.y, anomaly.z, anomaly.originalBlockType);
+                }
+                for (int yy = anomaly.y + 1; yy < anomaly.y + 8; yy++) {
+                    if (world.getBlockId(anomaly.x, yy, anomaly.z) == anomaly.blockType) {
+                        world.setBlock(anomaly.x, yy, anomaly.z, 0);
                     }
                 }
-
-                world.setBlock(anomaly.x, anomaly.y, anomaly.z, 0);
-                toRemove = entry.getKey();
-                break;
+                toRemove.add(entry.getKey());
             }
         }
 
-        if (toRemove != null) {
-            activeAnomalies.remove(toRemove);
+        for (int i = 0; i < toRemove.size(); i++) {
+            activeAnomalies.remove(toRemove.get(i));
         }
     }
 
@@ -166,20 +174,49 @@ public class DisappearingAnomalies {
      * Force despawn of all anomalies (for safe mode).
      */
     public static void despawnAll() {
+        if (world == null) {
+            activeAnomalies.clear();
+            return;
+        }
         for (AnomalyData anomaly : activeAnomalies.values()) {
-            world.setBlock(anomaly.x, anomaly.y, anomaly.z, 0);
+            if (world.getBlockId(anomaly.x, anomaly.y, anomaly.z) == anomaly.blockType) {
+                world.setBlock(anomaly.x, anomaly.y, anomaly.z, anomaly.originalBlockType);
+            }
+            for (int yy = anomaly.y + 1; yy < anomaly.y + 8; yy++) {
+                if (world.getBlockId(anomaly.x, yy, anomaly.z) == anomaly.blockType) {
+                    world.setBlock(anomaly.x, yy, anomaly.z, 0);
+                }
+            }
         }
         activeAnomalies.clear();
     }
 
     public static void setWorld(World w, EntityPlayer p) {
+        if (world != w) {
+            activeAnomalies.clear();
+            lastTickTime = 0;
+        }
         world = w;
         player = p;
     }
 
     public static void generateAnomaly() {
-        if (world != null && player != null) {
+        if (world != null && player != null && player.worldObj == world && !HorrorState.safeMode) {
             generateAnomalies();
         }
+    }
+
+    private static boolean hasAnomalyInChunk(int chunkX, int chunkZ) {
+        for (AnomalyData anomaly : activeAnomalies.values()) {
+            if ((anomaly.x >> 4) == chunkX && (anomaly.z >> 4) == chunkZ) return true;
+        }
+        return false;
+    }
+
+    public static void reset() {
+        despawnAll();
+        world = null;
+        player = null;
+        lastTickTime = 0;
     }
 }

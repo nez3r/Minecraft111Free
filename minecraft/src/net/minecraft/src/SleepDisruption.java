@@ -12,30 +12,18 @@ public class SleepDisruption {
     private static EntityPlayer player;
 
     /**
-     * Called when player attempts to sleep. Returns true to block normal sleep.
+     * Called when player attempts to sleep. Normal sleep must remain available.
      */
     public static boolean onPlayerSleep(EntityPlayer player) {
-        if (HorrorState.safeMode) return false;
+        if (player == null || player.worldObj == null || HorrorState.safeMode) return false;
+        setWorld(player.worldObj, player);
 
         // Speed multiplier reduces the cooldown
         // Effect is always active when /x is used
 
-        // Always interrupt sleep (horror effect)
-        sleepInterrupted = true;
-        interruptTime = System.currentTimeMillis();
-
-        // Play breaking bed/boards sound
-        if (player.worldObj != null) {
-            player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "step.wood", 1.0F, 0.5F);
-        }
-
-        // Destroy the bed
-        destroyBed(player);
-
-        // Spawn red torches around player
-        spawnRedTorches(player);
-
-        return true; // Block the sleep
+        sleepInterrupted = false;
+        interruptTime = 0;
+        return false;
     }
 
     private static void destroyBed(EntityPlayer player) {
@@ -46,7 +34,7 @@ public class SleepDisruption {
         int bedY = (int)player.posY;
         int bedZ = (int)Math.floor(player.posZ);
 
-        // Check nearby blocks for bed
+        // Check nearby blocks for bed (kept for callers that use this helper).
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 for (int dz = -1; dz <= 1; dz++) {
@@ -56,8 +44,7 @@ public class SleepDisruption {
 
                     int blockId = player.worldObj.getBlockId(checkX, checkY, checkZ);
                     if (blockId == Block.bed.blockID) {
-                        // Destroy the bed
-                        player.worldObj.setBlock(checkX, checkY, checkZ, 0);
+                        return;
                     }
                 }
             }
@@ -106,9 +93,16 @@ public class SleepDisruption {
      */
     public static void reset() {
         sleepInterrupted = false;
+        interruptTime = 0;
+        world = null;
+        player = null;
     }
 
     public static void setWorld(World w, EntityPlayer p) {
+        if (world != w) {
+            sleepInterrupted = false;
+            interruptTime = 0;
+        }
         world = w;
         player = p;
     }
@@ -116,5 +110,6 @@ public class SleepDisruption {
     public static void armTrap() {
         // Arm the sleep trap for next attempt
         sleepInterrupted = false;
+        interruptTime = 0;
     }
 }

@@ -1,6 +1,9 @@
 package net.minecraft.src;
 
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 
 /**
@@ -17,13 +20,50 @@ public class HorrorEffectsManager {
     private static long lastUpdateTime = 0;
     private static final long UPDATE_INTERVAL = 1000L; // Update only once per second
 
-    // Effect interval: 3-8 minutes (randomized)
-    private static final long MIN_EFFECT_INTERVAL = 3 * 60 * 1000L; // 3 minutes
-    private static final long MAX_EFFECT_INTERVAL = 8 * 60 * 1000L; // 8 minutes
-
-    // Effect repeat count: 1-3 times (randomized)
+    // A stage must exhaust its complete shuffled effect list before advancing.
+    private static final long MIN_EFFECT_INTERVAL = 4 * 60 * 1000L;
+    private static final long MAX_EFFECT_INTERVAL = 8 * 60 * 1000L;
+    private static final int STAGE_COUNT = 4;
+    // Stage 4 contains the original extreme effects plus the ten render glitches.
+    // Event 50 remains the final tunnel spawn and is not scheduled as a regular effect.
+    private static final int[] STAGE_EFFECT_COUNTS = {11, 8, 17, 26};
+    private static List<Integer> stageEffectOrder = new ArrayList<Integer>();
+    private static int stageEffectIndex = 0;
+    private static int currentEffectId = -1;
     private static int currentEffectRepeats = 0;
-    private static int maxEffectRepeats = 1;
+    private static int remainingEffectRepeats = 0;
+    private static long nextEffectTime = 0;
+    private static long nextEffectBaseInterval = 5 * 60 * 1000L;
+    private static boolean tunnelPhaseStarted = false;
+    private static boolean finalGlitchPhase = false;
+    private static int finalGlitchIndex = 0;
+    private static long nextFinalGlitchTime = 0L;
+    private static long manualTunnelTime = 0L;
+    private static List<Packet72HorrorEvent> pendingNetworkEvents = new ArrayList<Packet72HorrorEvent>();
+    private static long networkEffectBusyUntil = 0L;
+
+    public static void setSpeedMultiplier(float multiplier) {
+        HorrorState.horrorSpeedMultiplier = Math.max(0.1F, Math.min(100.0F, multiplier));
+        lastUpdateTime = 0;
+        if (initialized && !tunnelPhaseStarted && nextEffectTime > 0) {
+            nextEffectTime = System.currentTimeMillis()
+                + (long)(nextEffectBaseInterval / HorrorState.horrorSpeedMultiplier);
+        }
+
+    }
+
+    public static void stopFinalBsod() {
+        UnknownEffects.setEnabled(false);
+        UnknownEffects.restoreGamma();
+        UnknownEffects.setEnabled(true);
+    }
+
+    public static long getMillisUntilNextEffect() {
+        if (tunnelPhaseStarted || HorrorState.currentEffectStage >= STAGE_COUNT) {
+            return 0L;
+        }
+        return Math.max(0L, nextEffectTime - System.currentTimeMillis());
+    }
 
     /**
      * Initialize the horror effects system with world and player
@@ -33,13 +73,10 @@ public class HorrorEffectsManager {
         world = w;
         player = p;
         initialized = true;
+        resetScheduler();
 
         // Инициализировать Unknown.dll для нативных эффектов
-        try {
-            UnknownEffects.init();
-        } catch (Exception e) {
-            System.err.println("Failed to initialize Unknown.dll: " + e.getMessage());
-        }
+        UnknownEffects.init();
     }
 
     /**
@@ -61,64 +98,22 @@ public class HorrorEffectsManager {
 
         HorrorState.updatePlayTime();
 
-        // Initialize timer on first update
-        if (HorrorState.lastEffectTriggerTime == 0) {
-            HorrorState.lastEffectTriggerTime = currentTime;
-            // Рандомизировать первый интервал (3-8 минут)
-            maxEffectRepeats = 1 + rand.nextInt(3); // 1-3 повторения
-            currentEffectRepeats = 0;
-            // НЕ return - сразу вызвать первый эффект если множитель > 1
-            if (HorrorState.horrorSpeedMultiplier > 1.0F) {
-                triggerNextEffect();
-                HorrorState.lastEffectTriggerTime = currentTime;
-                HorrorState.effectsTriggeredCount++;
-            }
+        if (manualTunnelTime > 0L && currentTime >= manualTunnelTime) {
+            manualTunnelTime = 0L;
+            finalGlitchPhase = false;
+            nextFinalGlitchTime = 0L;
+            RenderHorrorEffects.reset();
+            triggerTunnelEvent();
             return;
         }
 
-        // Использовать средний интервал (5.5 минут) с учётом множителя скорости
-        // При x100 интервал должен быть ~3.3 секунды
-        long baseInterval = 5 * 60 * 1000L + 30 * 1000L; // 5.5 минут
-        long effectInterval = (long)(baseInterval / HorrorState.horrorSpeedMultiplier);
+        if (finalGlitchPhase) {
+            updateFinalGlitchSequence(currentTime);
+            return;
+        }
 
-        // Проверить, пора ли запускать следующий эффект
-        if (currentTime - HorrorState.lastEffectTriggerTime >= effectInterval) {
-            triggerNextEffect();
-            HorrorState.lastEffectTriggerTime = currentTime;
-            HorrorState.effectsTriggeredCount++;
-
-            // Увеличить счётчик повторений
-            currentEffectRepeats++;
-
-            // Если достигли максимума повторений, выбрать новое случайное количество
-            if (currentEffectRepeats >= maxEffectRepeats) {
-                maxEffectRepeats = 1 + rand.nextInt(3); // 1-3 повторения
-                currentEffectRepeats = 0;
-            }
-
-            // Progress to next stage every 4 effects
-            if (HorrorState.effectsTriggeredCount > 0 && HorrorState.effectsTriggeredCount % 4 == 0) {
-                if (HorrorState.currentEffectStage < 4) {
-                    HorrorState.currentEffectStage++;
-                }
-            }
-
-            // FINAL STAGE (Stage 5) - spawn tunnel ONCE only
-            if (HorrorState.currentEffectStage >= 4 && HorrorState.effectsTriggeredCount > 30 && !HorrorState.tunnelSpawned) {
-                try {
-                    System.out.println("[HorrorEffects] FINAL STAGE - Spawning Bedrock Tunnel ONCE (near player)");
-                    WorldGenBedrockTunnel tunnelGen = new WorldGenBedrockTunnel();
-                    int spawnX = (int)(player.posX + 30 + rand.nextInt(70) - 35); // 30-100 blocks from player
-                    int spawnZ = (int)(player.posZ + 30 + rand.nextInt(70) - 35);
-                    int spawnY = world.getHeightValue(spawnX, spawnZ);
-                    tunnelGen.generate(world, rand, spawnX, spawnY, spawnZ);
-                    HorrorState.tunnelSpawned = true; // Only spawn ONCE
-                    HorrorState.currentEffectStage = 5; // Final stage completed
-                    System.out.println("[HorrorEffects] Bedrock Tunnel spawned ONCE at: X=" + spawnX + ", Z=" + spawnZ + " (30-100 blocks from player at X=" + (int)player.posX + ", Z=" + (int)player.posZ + ")");
-                } catch (Exception tunnelErr) {
-                    System.err.println("[HorrorEffects] Tunnel spawn error: " + tunnelErr.getMessage());
-                }
-            }
+        if (!tunnelPhaseStarted && currentTime >= nextEffectTime) {
+            runScheduledEffect(currentTime);
         }
 
         // Update continuous effects that have tick methods (LESS FREQUENTLY)
@@ -129,9 +124,8 @@ public class HorrorEffectsManager {
      * Trigger next horror effect based on current stage
      */
     private static void triggerNextEffect() {
-        int effectNum = HorrorState.effectsTriggeredCount % 14;
+        int effectNum = currentEffectId;
 
-        System.out.println("[HorrorEffectsManager] Triggering effect - Stage: " + HorrorState.currentEffectStage + ", EffectNum: " + effectNum);
 
         switch (HorrorState.currentEffectStage) {
             case 0:
@@ -148,6 +142,158 @@ public class HorrorEffectsManager {
                 triggerStage4Effect(effectNum);
                 break;
         }
+    }
+
+    private static void resetScheduler() {
+            stageEffectOrder.clear();
+            stageEffectIndex = 0;
+            currentEffectId = -1;
+            currentEffectRepeats = 0;
+            remainingEffectRepeats = 0;
+            nextEffectTime = 0;
+            nextEffectBaseInterval = 5 * 60 * 1000L;
+            tunnelPhaseStarted = false;
+            finalGlitchPhase = false;
+            finalGlitchIndex = 0;
+            nextFinalGlitchTime = 0L;
+            manualTunnelTime = 0L;
+            HorrorState.currentEffectStage = 0;
+            HorrorState.effectsTriggeredCount = 0;
+            prepareStage(0);
+            nextEffectTime = System.currentTimeMillis()
+                + (long)(nextEffectBaseInterval
+                / Math.max(0.1F, HorrorState.horrorSpeedMultiplier));
+        }
+
+    private static void prepareStage(int stage) {
+            stageEffectOrder.clear();
+            int count = STAGE_EFFECT_COUNTS[stage];
+            for (int i = 0; i < count; i++) {
+                stageEffectOrder.add(Integer.valueOf(i));
+            }
+            stageEffectIndex = 0;
+            currentEffectId = -1;
+            remainingEffectRepeats = 0;
+            nextEffectBaseInterval = randomIntervalBase();
+            nextEffectTime = System.currentTimeMillis()
+                + (long)(nextEffectBaseInterval
+                / Math.max(0.1F, HorrorState.horrorSpeedMultiplier));
+        }
+
+    private static long randomIntervalBase() {
+            return MIN_EFFECT_INTERVAL
+                + (long)(rand.nextDouble() * (MAX_EFFECT_INTERVAL - MIN_EFFECT_INTERVAL));
+    }
+
+    private static long nextInterval(boolean repeat) {
+            long interval = randomIntervalBase();
+            if (repeat) {
+                interval = interval / (currentEffectRepeats + 1);
+            }
+            float multiplier = Math.max(0.01F, HorrorState.horrorSpeedMultiplier);
+            return Math.max(250L, (long)(interval / multiplier));
+        }
+
+    private static void runScheduledEffect(long currentTime) {
+            if (stageEffectIndex >= stageEffectOrder.size()) {
+                if (HorrorState.currentEffectStage < STAGE_COUNT - 1) {
+                    HorrorState.currentEffectStage++;
+                    prepareStage(HorrorState.currentEffectStage);
+                    nextEffectTime = currentTime + nextInterval(false);
+                    return;
+                }
+                startFinalGlitchSequence(currentTime);
+                return;
+            }
+
+            if (remainingEffectRepeats == 0) {
+                currentEffectId = stageEffectOrder.get(stageEffectIndex).intValue();
+                currentEffectRepeats = 1 + rand.nextInt(3);
+                remainingEffectRepeats = currentEffectRepeats;
+            }
+
+            triggerNextEffect();
+            remainingEffectRepeats--;
+            HorrorState.effectsTriggeredCount++;
+            HorrorState.lastEffectTriggerTime = currentTime;
+
+            if (remainingEffectRepeats > 0) {
+                nextEffectBaseInterval = randomIntervalBase()
+                    / (currentEffectRepeats + 1);
+                nextEffectTime = currentTime + (long)(nextEffectBaseInterval
+                    / Math.max(0.1F, HorrorState.horrorSpeedMultiplier));
+            } else {
+                stageEffectIndex++;
+                nextEffectBaseInterval = randomIntervalBase();
+                nextEffectTime = currentTime + (long)(nextEffectBaseInterval
+                    / Math.max(0.1F, HorrorState.horrorSpeedMultiplier));
+            }
+        }
+
+    private static void spawnTunnelAndEnterFinalPhase() {
+            if (tunnelPhaseStarted || player == null || world == null) {
+                return;
+            }
+            tunnelPhaseStarted = true;
+            try {
+                int spawnX = (int)(player.posX + 30 + rand.nextInt(70) - 35);
+                int spawnZ = (int)(player.posZ + 30 + rand.nextInt(70) - 35);
+                int spawnY = world.getHeightValue(spawnX, spawnZ);
+                new WorldGenBedrockTunnel().generate(world, rand, spawnX, spawnY, spawnZ);
+                HorrorState.tunnelSpawned = true;
+                HorrorState.currentEffectStage = STAGE_COUNT;
+            } catch (RuntimeException e) {
+                tunnelPhaseStarted = false;
+        }
+    }
+
+    private static void startFinalGlitchSequence(long currentTime) {
+        if (finalGlitchPhase || tunnelPhaseStarted) {
+            return;
+        }
+        finalGlitchPhase = true;
+        finalGlitchIndex = 0;
+        nextFinalGlitchTime = currentTime;
+    }
+
+    private static void updateFinalGlitchSequence(long currentTime) {
+        if (currentTime < nextFinalGlitchTime) {
+            return;
+        }
+
+        if (finalGlitchIndex == 0) {
+            triggerRenderEffect(56, 22000L, 1, "error.glitch11", 22000L);
+            nextFinalGlitchTime = currentTime + 22000L;
+            finalGlitchIndex++;
+        } else if (finalGlitchIndex == 1) {
+            triggerRenderEffect(57, 12000L, 2, "error.glitch6", 12000L);
+            nextFinalGlitchTime = currentTime + 24000L;
+            finalGlitchIndex++;
+        } else if (finalGlitchIndex == 2) {
+            triggerRenderEffect(58, 20000L, 1, "error.glitch2", 20000L);
+            nextFinalGlitchTime = currentTime + 20000L;
+            finalGlitchIndex++;
+        } else {
+            finalGlitchPhase = false;
+            nextFinalGlitchTime = 0L;
+            triggerTunnelEvent();
+        }
+
+    }
+
+    private static void triggerRenderEffect(int id, long duration, int repeats,
+                                            String sound, long soundDuration) {
+        RenderHorrorEffects.trigger(id, duration, repeats, sound, soundDuration);
+    }
+
+    private static void triggerTunnelEvent() {
+        if (tunnelPhaseStarted) {
+            return;
+        }
+        triggerSpecificEffect(50);
+        tunnelPhaseStarted = true;
+        HorrorState.tunnelSpawned = true;
+        HorrorState.currentEffectStage = STAGE_COUNT;
     }
 
     /**
@@ -169,38 +315,31 @@ public class HorrorEffectsManager {
                     HorrorEffects.increaseFogSlightly();
                     break;
                 case 4:
-                    System.out.println("[HorrorEffects] Triggering Hardware Beep (37Hz)");
                     UnknownEffects.hardwareBeep(37, 300);
                     break;
                 case 5:
-                    System.out.println("[HorrorEffects] Triggering Cursor Pull (Weak)");
                     UnknownEffects.possessCursor(400, 300, 10, 2000);
                     break;
                 case 6:
-                    System.out.println("[HorrorEffects] Triggering Clipboard Whisper");
                     int x1 = (int)player.posX;
                     int y1 = (int)player.posY;
                     int z1 = (int)player.posZ;
                     UnknownEffects.whisperClipboard("X: " + x1 + " Y: " + y1 + " Z: " + z1);
                     break;
                 case 7:
-                    System.out.println("[HorrorEffects] Triggering Window Jitter (5px)");
                     UnknownEffects.jitterWindow(5, 1000);
                     break;
                 case 8:
                     // NEW: WindowTransparencyGhosting (3s) — Stage 1
-                    System.out.println("[HorrorEffects] Triggering Window Transparency (3s)");
                     UnknownEffects.windowTransparency(3000);
                     break;
                 case 9:
                     // NEW: KeyboardInjectedTyping (3s) — Stage 1
-                    System.out.println("[HorrorEffects] Triggering Keyboard Injection (3s)");
                     triggerKeyboardInjection();
                     break;
                 case 10:
                     // NEW: FakeTaskkillAlert (5s) — Stage 1
-                    System.out.println("[HorrorEffects] Triggering Fake Taskkill Alert (5s)");
-                    triggerFakeTaskkillAlert();
+                    DynamicWindowTitle.triggerTitle(player, "???", 5000L);
                     break;
             }
         } catch (Exception e) {}
@@ -228,17 +367,14 @@ public class HorrorEffectsManager {
                     HorrorEffects.triggerFootstepEcho(player);
                     break;
                 case 5:
-                    System.out.println("[HorrorEffects] Triggering Window Jitter (10px)");
                     // Средняя тряска окна
                     UnknownEffects.jitterWindow(10, 1500);
                     break;
                 case 6:
-                    System.out.println("[HorrorEffects] Triggering Cursor Pull (Medium)");
                     // Притяжение курсора средней силы
                     UnknownEffects.possessCursor(200, 200, 25, 3000);
                     break;
                 case 7:
-                    System.out.println("[HorrorEffects] Triggering Hardware Beep (4000Hz)");
                     // Системный писк высокой частоты
                     UnknownEffects.hardwareBeep(4000, 400);
                     break;
@@ -268,34 +404,27 @@ public class HorrorEffectsManager {
                     HorrorEffects.triggerInventoryGlitchMajor();
                     break;
                 case 5:
-                    System.out.println("[HorrorEffects] Triggering Gamma (Red)");
                     UnknownEffects.corruptGamma(0, 2000);
                     break;
                 case 6:
-                    System.out.println("[HorrorEffects] Triggering Window Jitter (15px)");
                     UnknownEffects.jitterWindow(15, 2000);
                     break;
                 case 7:
-                    System.out.println("[HorrorEffects] Triggering Cursor Pull (Strong)");
                     UnknownEffects.possessCursor(100, 100, 50, 4000);
                     break;
                 case 8:
-                    System.out.println("[HorrorEffects] Triggering Ghost Overlay");
                     UnknownEffects.ghostOverlay(1000);
                     break;
                 case 9:
-                    System.out.println("[HorrorEffects] Triggering Hardware Beep (200Hz)");
                     UnknownEffects.hardwareBeep(200, 500);
                     break;
                 case 10:
-                    System.out.println("[HorrorEffects] Triggering Gamma (B/W)");
                     UnknownEffects.corruptGamma(1, 1500);
                     break;
                 case 11:
                     HorrorEffects.playLowHum(world, player);
                     break;
                 case 12:
-                    System.out.println("[HorrorEffects] Triggering Aggressive Taskbar");
                     UnknownEffects.aggressiveTaskbar(5000);
                     break;
                 case 13:
@@ -303,18 +432,16 @@ public class HorrorEffectsManager {
                     break;
                 case 14:
                     // NEW: MicrophoneFeedbackScreamer (2.5s) - Stage 3
-                    System.out.println("[HorrorEffects] Triggering Microphone Feedback (2.5s)");
-                    triggerMicrophoneFeedbackScreamer();
+                    DynamicWindowTitle.triggerTitle(player, "CAN YOU HEAR ME?", 2500L);
                     break;
                 case 15:
                     // NEW: ScreenStrobeDeconstruction (2s) - Stage 3
-                    System.out.println("[HorrorEffects] Triggering Screen Strobe (2s)");
                     ScreenStrobeEffect.trigger();
+                    DynamicWindowTitle.triggerTitle(player, "LOOK AWAY", 2000L);
                     break;
                 case 16:
                     // NEW: FakeHardwareFreezeAudioLoop (4s) - Stage 3
-                    System.out.println("[HorrorEffects] Triggering Hardware Freeze (4s)");
-                    FakeFreezeEffect.trigger();
+                    DynamicWindowTitle.triggerTitle(player, "PROCESSING...", 4000L);
                     break;
             }
         } catch (Exception e) {}
@@ -325,7 +452,7 @@ public class HorrorEffectsManager {
      */
     private static void triggerStage4Effect(int effectNum) {
         try {
-            switch (effectNum % 16) {
+            switch (effectNum % 26) {
                 case 0:
                     HorrorEffects.triggerBloodTime();
                     break;
@@ -348,31 +475,24 @@ public class HorrorEffectsManager {
                     HorrorEffects.playLowHum(world, player);
                     break;
                 case 7:
-                    System.out.println("[HorrorEffects] Triggering Screen Melt");
                     UnknownEffects.screenMelt(2000, 10);
                     break;
                 case 8:
-                    System.out.println("[HorrorEffects] Triggering Ghost Overlay (3s)");
                     UnknownEffects.ghostOverlay(3000);
                     break;
                 case 9:
-                    System.out.println("[HorrorEffects] Triggering Gamma (Dark Red)");
                     UnknownEffects.corruptGamma(2, 3000);
                     break;
                 case 10:
-                    System.out.println("[HorrorEffects] Triggering Max Window Jitter");
                     UnknownEffects.jitterWindow(25, 4000);
                     break;
                 case 11:
-                    System.out.println("[HorrorEffects] Triggering Max Cursor Pull");
                     UnknownEffects.possessCursor(0, 0, 90, 6000);
                     break;
                 case 12:
-                    System.out.println("[HorrorEffects] Triggering Aggressive Taskbar");
                     UnknownEffects.aggressiveTaskbar(8000);
                     break;
                 case 13:
-                    System.out.println("[HorrorEffects] Triggering Clipboard Whisper");
                     int x = (int)player.posX;
                     int y = (int)player.posY;
                     int z = (int)player.posZ;
@@ -380,14 +500,46 @@ public class HorrorEffectsManager {
                     break;
                 case 14:
                     // NEW: DisplayResolutionSnap (3s) - Stage 4
-                    System.out.println("[HorrorEffects] Triggering Resolution Snap (3s)");
                     UnknownEffects.resolutionSnap(3000);
                     break;
                 case 15:
                     // NEW: EntityTeleportJumpscareVoid (2.5s) - Stage 4
-                    System.out.println("[HorrorEffects] Triggering Void Drop (2.5s)");
-                    TemporalVoidDrop.setPlayer((EntityPlayerSP)player);
-                    TemporalVoidDrop.trigger();
+                    if (player instanceof EntityPlayerSP) {
+                        TemporalVoidDrop.setPlayer((EntityPlayerSP)player);
+                        TemporalVoidDrop.trigger();
+                    } else {
+                        DynamicWindowTitle.triggerTitle(player, "FALLING...", 2500L);
+                    }
+                    break;
+                case 16:
+                    RenderHorrorEffects.trigger(45, 5000L);
+                    break;
+                case 17:
+                    triggerRenderEffect(46, 5000L, 1, "error.glitch1", 5000L);
+                    break;
+                case 18:
+                    triggerRenderEffect(47, 3000L, 1, "error.glitch3", 3000L);
+                    break;
+                case 19:
+                    RenderHorrorEffects.trigger(48, 5000L);
+                    break;
+                case 20:
+                    triggerRenderEffect(49, 18000L, 1, "error.glitch5", 18000L);
+                    break;
+                case 21:
+                    triggerRenderEffect(51, 4000L, 3, "error.glitch8", 4000L);
+                    break;
+                case 22:
+                    triggerRenderEffect(52, 2000L, 2, "error.glitch12", 2000L);
+                    break;
+                case 23:
+                    triggerRenderEffect(53, 7000L, 1, "error.glitch4", 7000L);
+                    break;
+                case 24:
+                    triggerRenderEffect(54, 30000L, 1, "error.glitch9", 30000L);
+                    break;
+                case 25:
+                    RenderHorrorEffects.trigger(55, 5000L);
                     break;
             }
         } catch (Exception e) {}
@@ -412,13 +564,20 @@ public class HorrorEffectsManager {
         }
     }
 
+    private static void scheduleTunnelAfterFinalEffect(long duration) {
+        finalGlitchPhase = true;
+        tunnelPhaseStarted = false;
+        finalGlitchIndex = 3;
+        nextFinalGlitchTime = System.currentTimeMillis() + duration;
+        lastUpdateTime = 0L;
+    }
+
     /**
      * Trigger all effects immediately (for /x*n* command)
      */
     public static void triggerAllImmediate(float multiplier) {
         HorrorState.currentEffectStage = 4;
 
-        System.out.println("[HorrorEffectsManager] triggerAllImmediate() called with multiplier: " + multiplier);
 
         try {
             // ===== БАЗОВЫЕ ЭФФЕКТЫ (всегда) =====
@@ -508,7 +667,6 @@ public class HorrorEffectsManager {
                 UnknownEffects.fakeBSOD(3000);
                 UnknownEffects.ghostIcon(1);
                 InventoryDeletionLies.trigger(player, 15000);
-                WorldCorruptorGenerator.init(world, player);
                 HallucinatorySoundPan.trigger(player, 8000);
                 BedtimeTrappedDimension.setWorld(world, player);
 
@@ -516,7 +674,6 @@ public class HorrorEffectsManager {
                 UnknownEffects.whisperClipboard("SYSTEM COMPROMISED... NO ESCAPE...");
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
         HorrorState.lastEffectTriggerTime = System.currentTimeMillis();
@@ -527,8 +684,7 @@ public class HorrorEffectsManager {
      * Stop all effects (for /safe command)
      */
     public static void stopAll() {
-        HorrorState.currentEffectStage = 0;
-        HorrorState.effectsTriggeredCount = 0;
+        resetScheduler();
         HorrorState.lastEffectTriggerTime = 0;
 
         // Сброс всех игровых эффектов
@@ -557,7 +713,7 @@ public class HorrorEffectsManager {
                 case 1: stageName = "Stage 2 (Medium)"; break;
                 case 2: stageName = "Stage 3 (Strong)"; break;
                 case 3: stageName = "Stage 4 (Extreme)"; break;
-                case 4: stageName = "Stage 4 (MAX)"; break;
+                case 4: stageName = "Tunnel phase"; break;
             }
             player.addChatMessage("§6=== Monster Info ===");
             player.addChatMessage("§eStage: §f" + stageName);
@@ -566,10 +722,7 @@ public class HorrorEffectsManager {
             player.addChatMessage("§eSpeed: §fx" + HorrorState.horrorSpeedMultiplier);
 
             // Таймер до следующего эффекта
-            long currentTime = System.currentTimeMillis();
-            long timeSinceLastEffect = currentTime - HorrorState.lastEffectTriggerTime;
-            long effectInterval = (long)((MIN_EFFECT_INTERVAL + (MAX_EFFECT_INTERVAL - MIN_EFFECT_INTERVAL) / 2) / HorrorState.horrorSpeedMultiplier);
-            long timeUntilNext = Math.max(0, effectInterval - timeSinceLastEffect);
+            long timeUntilNext = getMillisUntilNextEffect();
 
             int secondsUntilNext = (int)(timeUntilNext / 1000);
             int minutesUntilNext = secondsUntilNext / 60;
@@ -579,18 +732,19 @@ public class HorrorEffectsManager {
 
             // Следующий эффект
             int nextEffectNum = HorrorState.effectsTriggeredCount % 14;
-            String nextEffect = getEffectName(nextEffectNum, HorrorState.currentEffectStage);
+            String nextEffect = getEffectName(currentEffectId >= 0 ? currentEffectId : nextEffectNum,
+                Math.min(HorrorState.currentEffectStage, STAGE_COUNT - 1));
             player.addChatMessage("§eNext effect: §f" + nextEffect);
 
             // Повторения
-            player.addChatMessage("§eRepeats: §f" + currentEffectRepeats + "/" + maxEffectRepeats);
+            player.addChatMessage("§eRepeats remaining: §f" + remainingEffectRepeats
+                + "/" + currentEffectRepeats);
 
             // Общая статистика
             player.addChatMessage("§eTotal triggered: §f" + HorrorState.effectsTriggeredCount);
 
         } catch (Exception e) {
             player.addChatMessage("§cError displaying info");
-            e.printStackTrace();
         }
     }
 
@@ -658,7 +812,6 @@ public class HorrorEffectsManager {
     public static void triggerSpecificEffect(int eventId) {
         // Получить текущего игрока и мир из статических переменных
         if (player == null || world == null) {
-            System.err.println("[HorrorEffectsManager] Cannot trigger effect: player or world is null");
             return;
         }
 
@@ -676,6 +829,7 @@ public class HorrorEffectsManager {
                     break;
                 case 3:
                     HorrorEffects.playAmbientSound(world, player);
+                    DynamicWindowTitle.triggerTitle(player, "AMBIENT WHISPER", 3000L);
                     break;
                 case 4:
                     HorrorEffects.playLowHum(world, player);
@@ -690,6 +844,7 @@ public class HorrorEffectsManager {
                     HorrorEffects.triggerHeavyFog();
                     break;
                 case 8:
+                    BloodTimeCycle.triggerBloodTime();
                     HorrorEffects.triggerBloodTime();
                     break;
                 case 9:
@@ -698,10 +853,10 @@ public class HorrorEffectsManager {
 
                 // === Unknown.dll Effects (10-19) ===
                 case 10:
-                    UnknownEffects.hardwareBeep(37, 500);
+                    DynamicWindowTitle.triggerTitle(player, "LOW FREQUENCY", 1500L);
                     break;
                 case 11:
-                    UnknownEffects.hardwareBeep(4000, 500);
+                    DynamicWindowTitle.triggerTitle(player, "HIGH FREQUENCY", 1500L);
                     break;
                 case 12:
                     UnknownEffects.jitterWindow(10, 2000);
@@ -723,6 +878,7 @@ public class HorrorEffectsManager {
                     break;
                 case 18:
                     UnknownEffects.corruptGamma(2, 2000); // Dark Red
+                    BloodTimeCycle.triggerBloodTime();
                     break;
                 case 19:
                     UnknownEffects.screenMelt(1500, 8);
@@ -747,59 +903,61 @@ public class HorrorEffectsManager {
 
                 // === New effects 24-29 ===
                 case 24:
-                    // WindowTransparencyGhosting (3s)
-                    System.out.println("[HorrorEffects] Event 24: Window Transparency (3s)");
-                    UnknownEffects.windowTransparency(3000);
+                    // WindowTransparencyGhosting (10s)
+                    UnknownEffects.windowTransparency(10000);
                     break;
                 case 25:
                     // InvertedCameraInversion (4s)
-                    System.out.println("[HorrorEffects] Event 25: Inverted Camera (4s)");
                     HorrorEffects.triggerInvertedCamera();
+                    DynamicWindowTitle.triggerTitle(player, "UPSIDE DOWN", 4000L);
                     break;
                 case 26:
-                    // FakeTaskkillAlert (5s)
-                    System.out.println("[HorrorEffects] Event 26: Fake Taskkill (5s)");
-                    triggerFakeTaskkillAlert();
+                    // Fixed title glitch (5s)
+                    DynamicWindowTitle.triggerTitle(player, "???", 5000L);
                     break;
                 case 27:
-                    // SystemVolumeSpikeHeartbeat (6s)
-                    System.out.println("[HorrorEffects] Event 27: Volume Spike (6s)");
-                    UnknownEffects.pulseSystemVolume(6000);
+                    // Heartbeat pulse (6s)
+                    HorrorEffects.triggerHeartbeat(player);
                     break;
                 case 28:
                     // DisplayResolutionSnap (3s)
-                    System.out.println("[HorrorEffects] Event 28: Resolution Snap (3s)");
                     UnknownEffects.resolutionSnap(3000);
                     break;
                 case 29:
                     // GhostIcon (2s)
-                    System.out.println("[HorrorEffects] Event 29: Ghost Icon (2s)");
                     UnknownEffects.ghostIcon(1);
                     break;
 
                 // === Entity Spawns (30-34) ===
                 case 30:
                     HorrorEffects.spawnPhantomObserver(world, player);
+                    DynamicWindowTitle.triggerTitle(player, "PHANTOM OBSERVER", 4000L);
                     break;
                 case 31:
                     HorrorEffects.spawnMirrorDouble(world, player);
+                    break;
+                case 32:
+                    triggerKeyboardInjection();
                     break;
 
                 // === Advanced Effects (35-44) ===
                 case 35:
                     HorrorEffects.triggerPartisanInterference(world, player);
+                    DynamicWindowTitle.triggerTitle(player, "PARTISAN INTERFERENCE", 4000L);
                     break;
                 case 36:
                     HorrorEffects.generateDisappearingAnomaly(world, player);
+                    DynamicWindowTitle.triggerTitle(player, "DISAPPEARING ANOMALY", 4000L);
                     break;
                 case 37:
                     HorrorEffects.triggerGlitchedWindowTitle(player);
                     break;
                 case 38:
-                    HorrorEffects.triggerFakeFrameFreeze(player);
+                    DynamicWindowTitle.triggerTitle(player, "SIGNAL LOST", 3000L);
                     break;
                 case 39:
-                    HorrorEffects.triggerViolentShake();
+                    ScreenStrobeEffect.trigger();
+                    DynamicWindowTitle.triggerTitle(player, "DON'T MOVE", 3000L);
                     break;
                 case 40:
                     GlitchManager.triggerImmediateGlitches(10.0F);
@@ -808,59 +966,71 @@ public class HorrorEffectsManager {
                 // === New effects 41-44 ===
                 case 41:
                     // MicrophoneFeedbackScreamer (2.5s)
-                    System.out.println("[HorrorEffects] Event 41: Microphone Feedback (2.5s)");
-                    triggerMicrophoneFeedbackScreamer();
+                    ScreenStrobeEffect.trigger();
+                    HorrorEffects.triggerInvertedCamera();
+                    DynamicWindowTitle.triggerTitle(player, "CAN YOU HEAR ME?", 2500L);
                     break;
                 case 42:
                     // ScreenStrobeDeconstruction (2s)
-                    System.out.println("[HorrorEffects] Event 42: Screen Strobe (2s)");
-                    ScreenStrobeEffect.trigger();
+                    HorrorEffects.triggerInvertedCamera();
+                    DynamicWindowTitle.triggerTitle(player, "LOOK AWAY", 2000L);
                     break;
                 case 43:
                     // FakeHardwareFreezeAudioLoop (4s)
-                    System.out.println("[HorrorEffects] Event 43: Hardware Freeze (4s)");
-                    FakeFreezeEffect.trigger();
+                    ScreenStrobeEffect.trigger();
+                    HorrorEffects.triggerInvertedCamera();
+                    DynamicWindowTitle.triggerTitle(player, "PROCESSING...", 4000L);
                     break;
                 case 44:
                     // EntityTeleportJumpscareVoid (2.5s)
-                    System.out.println("[HorrorEffects] Event 44: Void Drop (2.5s)");
                     TemporalVoidDrop.setPlayer((EntityPlayerSP)player);
                     TemporalVoidDrop.trigger();
                     break;
 
-                // === Combo Effects (45-50) ===
                 case 45:
-                    // Light Combo
-                    HorrorEffects.triggerFootstepEcho(player);
-                    HorrorEffects.triggerInventoryGlitchMinor();
-                    UnknownEffects.hardwareBeep(37, 300);
+                    RenderHorrorEffects.trigger(45, 5000L);
                     break;
                 case 46:
-                    // Medium Combo
-                    HorrorEffects.triggerModerateFog();
-                    HorrorEffects.checkBehindYouGlitch(world, player);
-                    UnknownEffects.jitterWindow(10, 2000);
+                    triggerRenderEffect(46, 5000L, 1, "error.glitch1", 5000L);
                     break;
                 case 47:
-                    // Heavy Combo
-                    HorrorEffects.triggerBloodTime();
-                    HorrorEffects.triggerHeavyFog();
-                    UnknownEffects.corruptGamma(0, 2000);
+                    triggerRenderEffect(47, 3000L, 1, "error.glitch3", 3000L);
                     break;
                 case 48:
-                    // Extreme Combo
-                    UnknownEffects.screenMelt(1500, 8);
-                    UnknownEffects.ghostOverlay(2000);
-                    HorrorEffects.triggerViolentShake();
+                    RenderHorrorEffects.trigger(48, 5000L);
                     break;
                 case 49:
-                    // Entity Combo
-                    HorrorEffects.spawnPhantomObserver(world, player);
-                    HorrorEffects.spawnMirrorDouble(world, player);
+                    triggerRenderEffect(49, 18000L, 1, "error.glitch5", 18000L);
                     break;
                 case 50:
                     // ФИНАЛ - Спавн бедрокового туннеля
                     HorrorEffects.spawnBedrockTunnel(player);
+                    break;
+                case 51:
+                    triggerRenderEffect(51, 4000L, 3, "error.glitch8", 4000L);
+                    break;
+                case 52:
+                    triggerRenderEffect(52, 2000L, 2, "error.glitch12", 2000L);
+                    break;
+                case 53:
+                    triggerRenderEffect(53, 7000L, 1, "error.glitch4", 7000L);
+                    break;
+                case 54:
+                    triggerRenderEffect(54, 30000L, 1, "error.glitch9", 30000L);
+                    break;
+                case 55:
+                    RenderHorrorEffects.trigger(55, 5000L);
+                    break;
+                case 56:
+                    triggerRenderEffect(56, 22000L, 1, "error.glitch11", 22000L);
+                    break;
+                case 57:
+                    triggerRenderEffect(57, 12000L, 2, "error.glitch6", 12000L);
+                    break;
+                case 58:
+                    triggerRenderEffect(58, 20000L, 1, "error.glitch2", 20000L);
+                    scheduleTunnelAfterFinalEffect(20000L);
+                    manualTunnelTime = System.currentTimeMillis() + 20000L;
                     break;
 
                 default:
@@ -870,7 +1040,58 @@ public class HorrorEffectsManager {
                     break;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Execute an event authorized by the server.
+     */
+    public static void triggerNetworkEvent(Packet72HorrorEvent event) {
+        if (event == null || player == null || world == null) {
+            return;
+        }
+        pendingNetworkEvents.add(event);
+        processNetworkEvents();
+    }
+
+    public static void processNetworkEvents() {
+        if (player == null || world == null || pendingNetworkEvents.isEmpty()) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if (now < networkEffectBusyUntil) {
+            return;
+        }
+        Packet72HorrorEvent event = pendingNetworkEvents.remove(0);
+        if (event.eventId == 59) {
+            stopFinalBsod();
+            HorrorState.safeMode = true;
+            return;
+        }
+        if (event.stage >= 0 && event.stage < STAGE_COUNT) {
+            triggerScheduledStageEffect(event.stage, event.eventId);
+        } else {
+            triggerSpecificEffect(event.eventId);
+        }
+        networkEffectBusyUntil = now + Math.max(250L, event.parameter);
+    }
+
+    private static void triggerScheduledStageEffect(int stage, int effectNum) {
+        switch (stage) {
+            case 0:
+                triggerStage1Effect(effectNum);
+                break;
+            case 1:
+                triggerStage2Effect(effectNum);
+                break;
+            case 2:
+                triggerStage3Effect(effectNum);
+                break;
+            case 3:
+                triggerStage4Effect(effectNum);
+                break;
+            default:
+                break;
         }
     }
 
@@ -878,10 +1099,11 @@ public class HorrorEffectsManager {
      * Set world and player (for reinitialization)
      */
     public static void setWorld(World w, EntityPlayer p) {
-        world = w;
-        player = p;
-        if (w != null && p != null) {
+        if (w != null && p != null && (!initialized || world != w)) {
             init(w, p);
+        } else {
+            world = w;
+            player = p;
         }
     }
 
@@ -899,35 +1121,13 @@ public class HorrorEffectsManager {
             String username = System.getProperty("user.name", "User");
             String message = "i can hear you typing, " + username;
             Minecraft mc = Minecraft.theMinecraft;
+            if (mc == null || mc.ingameGUI == null) return;
 
-            // Открываем чат (если ещё не открыт)
-            if (mc.currentScreen == null) {
-                mc.displayGuiScreen(new GuiChat());
-            }
-
-            // Посимвольно вводим текст с задержкой
-            final String finalMsg = message;
-            new Thread(new Runnable() { public void run() {
-                try {
-                    Thread.sleep(100);
-                    for (int i = 0; i < finalMsg.length(); i++) {
-                        if (mc.currentScreen instanceof GuiChat) {
-                            GuiChat chat = (GuiChat) mc.currentScreen;
-                            chat.message += finalMsg.charAt(i);
-                        }
-                        Thread.sleep(50);
-                    }
-                    // Закрываем чат через 1 секунду после окончания
-                    Thread.sleep(1000);
-                    if (mc.currentScreen instanceof GuiChat) {
-                        mc.displayGuiScreen(null);
-                    }
-                } catch (Exception e) {
-                    // ignore
-                }
-            }}).start();
+            GuiChat chat = new GuiChat();
+            mc.displayGuiScreen(chat);
+            chat.message = message;
+            mc.ingameGUI.addChatMessage("\u00a78" + message);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -951,7 +1151,6 @@ public class HorrorEffectsManager {
                 }
             }}).start();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -985,7 +1184,6 @@ public class HorrorEffectsManager {
      * Записывает 2 сек звука и воспроизводит с пониженным питчем
      */
     private static void triggerMicrophoneFeedbackScreamer() {
-        System.out.println("[HorrorEffects] Microphone Feedback Screamer triggered (2.5s)");
         // NOTE: Полная реализация требует JNI доступ к микрофону
         // Временно: громкий звук с эффектом демона
         try {

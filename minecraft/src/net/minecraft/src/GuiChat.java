@@ -84,12 +84,16 @@ public class GuiChat extends GuiScreen {
 				currentTyping = "";
 
 				// Horror mod: Check for special commands
-				if(var4.equals("/safe")) {
-					HorrorState.safeMode = true;
-					GlitchManager.stopAll();
-					HorrorEffectsManager.stopAll();
+				boolean multiplayer = this.mc.theWorld != null && this.mc.theWorld.multiplayerWorld;
+				if(multiplayer && (var4.equals("/safe") || var4.equals("/mstinfo")
+						|| var4.startsWith("/event") || var4.startsWith("/x"))) {
+					this.mc.thePlayer.sendChatMessage(var4);
+					this.mc.displayGuiScreen((GuiScreen)null);
+					return;
+				} else if(var4.equals("/safe")) {
+					HorrorEffectsManager.stopFinalBsod();
 					this.mc.thePlayer.addChatMessage("\u00a7aSafe mode enabled.");
-					this.mc.thePlayer.addChatMessage("\u00a7aGood luck!");
+					this.mc.thePlayer.addChatMessage("\u00a7aOnly the final BSOD was stopped.");
 					this.mc.displayGuiScreen((GuiScreen)null);
 					return;
 				} else if(var4.equals("/mstinfo")) {
@@ -103,15 +107,15 @@ public class GuiChat extends GuiScreen {
 						String eventStr = var4.substring(6).trim();
 						if(eventStr.length() > 0) {
 							int eventId = Integer.parseInt(eventStr);
-							if(eventId >= 0 && eventId <= 50) {
+							if((eventId >= 0 && eventId <= 58) || eventId == 50) {
 								HorrorEffectsManager.triggerSpecificEffect(eventId);
 								this.mc.thePlayer.addChatMessage("\u00a7eTriggered event #" + eventId);
 							} else {
-								this.mc.thePlayer.addChatMessage("\u00a7cEvent ID must be between 0 and 50");
+								this.mc.thePlayer.addChatMessage("\u00a7cEvent ID is unavailable (use 0-58)");
 							}
 						} else {
 							this.mc.thePlayer.addChatMessage("\u00a7eUsage: /event <number> (e.g. /event 5)");
-							this.mc.thePlayer.addChatMessage("\u00a7eAvailable events: 0-50");
+							this.mc.thePlayer.addChatMessage("\u00a7eAvailable events: 0-58");
 						}
 					} catch (NumberFormatException e) {
 						this.mc.thePlayer.addChatMessage("\u00a7cInvalid event number");
@@ -126,8 +130,7 @@ public class GuiChat extends GuiScreen {
 							float multiplier = Float.parseFloat(multiplierStr);
 							if(multiplier >= 0.1F && multiplier <= 100.0F) {
 								HorrorState.horrorSpeedMultiplier = multiplier;
-								// \u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u0442\u0430\u0439\u043c\u0435\u0440 \u0447\u0442\u043e\u0431\u044b \u044d\u0444\u0444\u0435\u043a\u0442\u044b \u0441\u0440\u0430\u0431\u043e\u0442\u0430\u043b\u0438 \u0441\u0440\u0430\u0437\u0443
-								HorrorState.lastEffectTriggerTime = 0;
+								HorrorEffectsManager.setSpeedMultiplier(multiplier);
 								this.mc.thePlayer.addChatMessage("\u00a7eHorror speed set to x" + multiplier);
 								this.mc.thePlayer.addChatMessage("\u00a7eEffects will appear " + multiplier + "x faster");
 							} else {

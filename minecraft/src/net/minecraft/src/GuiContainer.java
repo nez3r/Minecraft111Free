@@ -143,6 +143,9 @@ public abstract class GuiContainer extends GuiScreen {
 	protected abstract void drawGuiContainerBackgroundLayer(float var1, int var2, int var3);
 
 	private void drawSlotInventory(Slot var1) {
+		if (InventoryDeletionLies.isSlotHidden(var1)) {
+			return;
+		}
 		int var2 = var1.xDisplayPosition;
 		int var3 = var1.yDisplayPosition;
 		ItemStack var4 = var1.getStack();

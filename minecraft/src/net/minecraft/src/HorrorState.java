@@ -93,6 +93,7 @@ public class HorrorState {
         safeMode = false;
         portalGenerated = false;
         tunnelGenerated = false;
+        tunnelSpawned = false;
         tunnelEntranceClosed = false;
         tunnelChestOpened = false;
         currentEffectStage = 0;

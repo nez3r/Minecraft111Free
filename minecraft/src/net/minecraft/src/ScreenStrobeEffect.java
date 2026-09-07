@@ -10,7 +10,6 @@ public class ScreenStrobeEffect {
     private static boolean blackFrame = false;
 
     public static void trigger() {
-        System.out.println("[ScreenStrobeEffect] Triggering (2s)");
         strobeActive = true;
         strobeEnd = System.currentTimeMillis() + 2000;
         blackFrame = false;

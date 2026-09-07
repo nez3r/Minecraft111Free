@@ -5,8 +5,8 @@ package net.minecraft.src;
  */
 public class InventoryGlitch {
     private static boolean glitchActive = false;
-    private static long lastGlitchTime = 0;
-    private static final long GLITCH_INTERVAL = 15000L; // 15 seconds
+    private static long glitchEndTime = 0;
+    private static final long GLITCH_DURATION = 5000L;
     private static EntityPlayer player;
 
     public static void setPlayer(EntityPlayer p) {
@@ -14,12 +14,15 @@ public class InventoryGlitch {
     }
 
     public static boolean isGlitchActive() {
-        return glitchActive && (System.currentTimeMillis() - lastGlitchTime > GLITCH_INTERVAL);
+        if (glitchActive && System.currentTimeMillis() >= glitchEndTime) {
+            glitchActive = false;
+        }
+        return glitchActive;
     }
 
     public static void triggerGlitch() {
         glitchActive = true;
-        lastGlitchTime = System.currentTimeMillis();
+        glitchEndTime = System.currentTimeMillis() + GLITCH_DURATION;
     }
 
     /**
@@ -37,10 +40,6 @@ public class InventoryGlitch {
         };
         String newName = glitchedNames[(int)(Math.random() * glitchedNames.length)];
 
-        // End glitch after one call (random single occurrence)
-        if (Math.random() < 0.7) {
-            glitchActive = false;
-        }
         return newName;
     }
 
@@ -53,10 +52,7 @@ public class InventoryGlitch {
     }
 
     public static void tick() {
-        // Random trigger of glitches
-        if (Math.random() < 0.01) { // 1% chance per tick
-            triggerGlitch();
-        }
+        isGlitchActive();
     }
 
     /**
@@ -64,7 +60,7 @@ public class InventoryGlitch {
      */
     public static void triggerMinorGlitch() {
         glitchActive = true;
-        lastGlitchTime = System.currentTimeMillis();
+        glitchEndTime = System.currentTimeMillis() + GLITCH_DURATION;
     }
 
     /**
@@ -72,7 +68,7 @@ public class InventoryGlitch {
      */
     public static void triggerMajorGlitch() {
         glitchActive = true;
-        lastGlitchTime = System.currentTimeMillis();
+        glitchEndTime = System.currentTimeMillis() + GLITCH_DURATION;
     }
 
     /**
@@ -80,6 +76,6 @@ public class InventoryGlitch {
      */
     public static void reset() {
         glitchActive = false;
-        lastGlitchTime = 0;
+        glitchEndTime = 0;
     }
 }

@@ -6,6 +6,8 @@ package net.minecraft.src;
  * approached closer than 12-15 blocks or when directly looked at.
  */
 public class PhantomObserver extends EntityMob {
+    private static World activeWorld;
+    private static EntityPlayer activePlayer;
     private static final double SPAWN_DISTANCE_MIN = 64.0D; // Edge of render distance
     private static final double SPAWN_DISTANCE_MAX = 80.0D;
     private static final double DESPAWN_DISTANCE_CLOSE = 12.0D;
@@ -47,7 +49,7 @@ public class PhantomObserver extends EntityMob {
             return;
         }
 
-        if (targetPlayer == null || targetPlayer.isDead) {
+        if (targetPlayer == null || targetPlayer.isDead || targetPlayer.worldObj != worldObj) {
             this.setEntityDead();
             return;
         }
@@ -70,14 +72,6 @@ public class PhantomObserver extends EntityMob {
             return;
         }
 
-        // Spawn new observers periodically at edge of render distance
-        if (System.currentTimeMillis() - lastSpawnTime > SPAWN_INTERVAL) {
-            spawnNewObserver();
-            lastSpawnTime = System.currentTimeMillis();
-        }
-
-        // Make completely invisible but present for collision detection
-        this.renderDistanceWeight = 0.0D;
         this.prevRotationYaw = this.rotationYaw;
         this.prevRotationPitch = this.rotationPitch;
     }
@@ -195,25 +189,54 @@ public class PhantomObserver extends EntityMob {
     }
 
     public static void setWorld(World w, EntityPlayer p) {
-        // Static utility methods for manager
+        if (activeWorld != w || activePlayer != p) removeAll();
+        activeWorld = w;
+        activePlayer = p;
     }
 
     public static void spawnNearPlayer(World w, EntityPlayer p) {
         // Spawn phantom near player - simplified
         if (w != null && p != null) {
             try {
-                PhantomObserver phantom = new PhantomObserver(w);
-                phantom.setPosition(p.posX + 20, p.posY, p.posZ);
+                PhantomObserver phantom = new PhantomObserver(w, p);
+                setWorld(w, p);
+                double angle = Math.random() * Math.PI * 2.0D;
+                double distance = SPAWN_DISTANCE_MIN;
+                double x = p.posX + Math.cos(angle) * distance;
+                double z = p.posZ + Math.sin(angle) * distance;
+                double y = w.getHeightValue((int)x, (int)z) + 1;
+                phantom.setPosition(x, y, z);
                 w.spawnEntityInWorld(phantom);
             } catch (Exception e) {}
         }
     }
 
     public static void updateAll(World w, EntityPlayer p) {
-        // Update all phantoms in world
+        if (w == null || p == null) {
+            removeAll();
+            return;
+        }
+        setWorld(w, p);
+        java.util.ArrayList entities = new java.util.ArrayList(w.loadedEntityList);
+        for (int i = 0; i < entities.size(); i++) {
+            Object entity = entities.get(i);
+            if (entity instanceof PhantomObserver) {
+                ((PhantomObserver)entity).targetPlayer = p;
+            }
+        }
     }
 
     public static void removeAll() {
-        // Remove all phantoms
+        if (activeWorld != null) {
+            java.util.ArrayList entities = new java.util.ArrayList(activeWorld.loadedEntityList);
+            for (int i = 0; i < entities.size(); i++) {
+                Object entity = entities.get(i);
+                if (entity instanceof PhantomObserver) {
+                    ((Entity)entity).setEntityDead();
+                }
+            }
+        }
+        activeWorld = null;
+        activePlayer = null;
     }
 }
